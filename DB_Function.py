@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from collections import defaultdict
+import pandas as pd
 import DB_Objects as db
 
 def get_values(*args):
@@ -14,7 +15,15 @@ def get_values(*args):
         print(f'The item: {variable}.    The Value: {value.get()}')
         data_entered[variable] = value.get()
     print('values entered to dictionary')
+    data_entered['internal_id'] = next_ticket_id()
     perform_checks(data_entered)
+
+def next_ticket_id():
+    tickets_file = pd.read_csv('Data/Raw/Tickets.csv')
+    tickets_list = list(tickets_file['internal_id'])
+    print(tickets_list)
+
+
 
 def perform_checks(data_dict):
     print('in perform_checks')
@@ -90,7 +99,8 @@ def create_ticket():
 
 
 def main():
-    create_ticket()
+    #create_ticket()
+    next_ticket_id()
 
 
 if __name__=='__main__':
