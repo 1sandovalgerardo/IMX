@@ -7,7 +7,8 @@ import DB_Objects as db
 
 def get_values(*args):
     fields = ['ticket_number', 'job_site', 'date', 'employees',
-              'tare_weight', 'gross_weight', 'net_weight', 'material_type', 'rate']
+              'tare_weight', 'gross_weight', 'net_weight',
+              'material_type', 'rate']
     data_entered = defaultdict()
     for variable, value in zip(fields, args):
         print(f'The item: {variable}.    The Value: {value.get()}')
