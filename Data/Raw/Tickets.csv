@@ -1,0 +1,3 @@
+,external_id,internal_id,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,material_type,rate
+0,1001,100001,name,2021-12-31,Gerardo Sandoval,2,100,200,100,metal,60
+1,1001,100001,name,2021-12-31,Fred Barker,2,100,200,100,metal,60
