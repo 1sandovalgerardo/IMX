@@ -8,7 +8,7 @@ import Objects as db
 
 def get_values(*args):
     """Gets values from ticket entry GUI"""
-    fields = ['ticket_number', 'job_site', 'date', 'employees',
+    fields = ['ticket_number', 'company_name', 'job_site', 'date', 'employees',
               'tare_weight', 'gross_weight', 'net_weight',
               'material_type', 'rate']
     data_entered = defaultdict()
@@ -70,7 +70,7 @@ def get_companies():
 def create_ticket():
     master_window = tk.Tk()
     tk.Label(master_window, text='Ticket Number').grid(row=0)
-    tk.Label(master_window, text='Company').grid(row=1)
+    tk.Label(master_window, text='Company Name').grid(row=1)
     tk.Label(master_window, text='Job Site').grid(row=2)
     tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3)
     tk.Label(master_window, text='Employees (separate with comma)').grid(row=4)
@@ -84,10 +84,11 @@ def create_ticket():
     def company_show():
         tk.label.config(text=clicked.get())
     company_options = get_companies()
-    clicked = tk.StringVar()
+    selected_company = tk.StringVar()
+    selected_company.set('Select Company')
 
     ticket_number = tk.Entry(master_window)
-    company = tk.OptionMenu(master_window, clicked, *options)
+    company_name = tk.OptionMenu(master_window, selected_company, *company_options)
     job_site = tk.Entry(master_window)
     date = tk.Entry(master_window)
     employees = tk.Entry(master_window)
@@ -98,23 +99,24 @@ def create_ticket():
     rate = tk.Entry(master_window)
 
     ticket_number.grid(row=0, column=1)
-    company.grit(      row=0, column=1)
-    job_site.grid(     row=1, column=1)
-    date.grid(         row=2, column=1)
-    employees.grid(    row=3, column=1)
-    tare_weight.grid(  row=4, column=1)
-    gross_weight.grid( row=5, column=1)
-    net_weight.grid(   row=6, column=1)
-    material_type.grid(row=7, column=1)
-    rate.grid(         row=8, column=1)
+    company_name.grid(      row=1, column=1)
+    job_site.grid(     row=2, column=1)
+    date.grid(         row=3, column=1)
+    employees.grid(    row=4, column=1)
+    tare_weight.grid(  row=5, column=1)
+    gross_weight.grid( row=6, column=1)
+    net_weight.grid(   row=7, column=1)
+    material_type.grid(row=8, column=1)
+    rate.grid(         row=9, column=1)
 
 
     tk.Button(master_window,
               text='Quit',
-              command=master_window.quit).grid(row=9, column=0, sticky=tk.W, pady=4)
+              command=master_window.quit).grid(row=10, column=0, sticky=tk.W, pady=4)
     tk.Button(master_window,
               text='Enter Data',
               command=lambda: get_values(ticket_number,
+                                         selected_company,
                                          job_site,
                                          date,
                                          employees,
@@ -122,16 +124,15 @@ def create_ticket():
                                          gross_weight,
                                          net_weight,
                                          material_type,
-                                         rate)).grid(row=9, column=1, sticky=tk.W, pady=4)
+                                         rate)).grid(row=10, column=1, sticky=tk.W, pady=4)
 
     master_window.mainloop()
 
 
 def main():
-    #create_ticket()
+    create_ticket()
     #next_ticket_id()
     #check_internal_id()
-    get_companies()
 
 
 if __name__=='__main__':
