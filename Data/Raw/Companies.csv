@@ -1,6 +1,4 @@
 company_id,company_name,address,city,state,active
 1001,Scrap Inc,123 Main St,Chicago,IL,True
-company_id,company_name,address,city,state,active
-1001,Scrap Inc,123 Main St,Chicago,IL,True
-company_id,company_name,address,city,state,active
-1002,Big Inc,321 Main St,Chicago,IL,True
+1002,Scrap2 Inc,123 Main St,Chicago,IL,True
+1003,Big Inc,321 Main St,Chicago,IL,True

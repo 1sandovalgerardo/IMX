@@ -61,20 +61,33 @@ def weight_warning_box():
                            message=message)
     #warning_window.mainloop()
 
+def get_companies():
+    data = pd.read_csv('../Data/Raw/Companies.csv')
+    list_of_companies = list(data['company_name'])
+    #print(list_of_companies)
+    return list_of_companies
 
 def create_ticket():
     master_window = tk.Tk()
     tk.Label(master_window, text='Ticket Number').grid(row=0)
-    tk.Label(master_window, text='Job Site').grid(row=1)
-    tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=2)
-    tk.Label(master_window, text='Employees (separate with comma)').grid(row=3)
-    tk.Label(master_window, text='Tare Weight').grid(row=4)
-    tk.Label(master_window, text='Gross Weight').grid(row=5)
-    tk.Label(master_window, text='Net Weight').grid(row=6)
-    tk.Label(master_window, text='Material Type').grid(row=7)
-    tk.Label(master_window, text='Rate').grid(row=8)
+    tk.Label(master_window, text='Company').grid(row=1)
+    tk.Label(master_window, text='Job Site').grid(row=2)
+    tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3)
+    tk.Label(master_window, text='Employees (separate with comma)').grid(row=4)
+    tk.Label(master_window, text='Tare Weight').grid(row=5)
+    tk.Label(master_window, text='Gross Weight').grid(row=6)
+    tk.Label(master_window, text='Net Weight').grid(row=7)
+    tk.Label(master_window, text='Material Type').grid(row=8)
+    tk.Label(master_window, text='Rate').grid(row=9)
+
+    # create companies dropdown menu
+    def company_show():
+        tk.label.config(text=clicked.get())
+    company_options = get_companies()
+    clicked = tk.StringVar()
 
     ticket_number = tk.Entry(master_window)
+    company = tk.OptionMenu(master_window, clicked, *options)
     job_site = tk.Entry(master_window)
     date = tk.Entry(master_window)
     employees = tk.Entry(master_window)
@@ -85,6 +98,7 @@ def create_ticket():
     rate = tk.Entry(master_window)
 
     ticket_number.grid(row=0, column=1)
+    company.grit(      row=0, column=1)
     job_site.grid(     row=1, column=1)
     date.grid(         row=2, column=1)
     employees.grid(    row=3, column=1)
@@ -114,9 +128,10 @@ def create_ticket():
 
 
 def main():
-    create_ticket()
+    #create_ticket()
     #next_ticket_id()
     #check_internal_id()
+    get_companies()
 
 
 if __name__=='__main__':
