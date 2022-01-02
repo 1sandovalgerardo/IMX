@@ -17,22 +17,34 @@ class Employee(object):
         self.start_date = start_date
         self.active = active
 
-class JobSite(object):
-    def __init__(self, id, company_name, address, city, state,
+class Company(object):
+    def __init__(self, company_id, company_name, address, city, state,
                  active):
-        self.id = id
+        self.company_id = company_id
         self.company_name = company_name
         self.address = address
         self.city = city
         self.state = state
         self.active = active
 
-class SiteRate(JobSite):
-    def __init__(self, rebar_rate=None, upsteel_rate=None, wire_rate=None, hourly_rate=None):
-        self.rebar_rate = rebar_rate
-        self.upsteel_rate = upsteel_rate
-        self.wire_rate = wire_rate
-        self.hourly_rate = hourly_rate
+class JobSite(Company):
+    def __init__(self, company_name, company_id, jobsite_name, jobsite_id,
+                 active_site, **kwargs):
+        Company.__init__(self, company_name, company_id)
+        self.jobsite_name = jobsite_name
+        self.jobsite_id = jobsite_id
+        self.site_rate = SiteRate(**kwargs)
+        self.active_site = active_site
+
+    def add_metal_rate(self):
+        pass
+
+class SiteRate(object):
+    def __init__(self, **kwargs):
+        self.rebar_rate = kwargs['rebar']
+        self.upsteel_rate = kwargs['upsteel']
+        self.wire_rate = kwargs['wire']
+        self.hourly_rate = kwargs['hourly']
 
 class Ticket(object):
     def __init__(self, id_external, id_internal, job_site,

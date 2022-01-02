@@ -1,3 +1,4 @@
-,external_id,internal_id,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,material_type,rate
-0,1001,100001,name,2021-12-31,Gerardo Sandoval,2,100,200,100,metal,60
-1,1001,100001,name,2021-12-31,Fred Barker,2,100,200,100,metal,60
+external_id,internal_id,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,material_type,rate
+1001,100001,name,2021-12-31,"Gerardo Sandoval, Fred Barker",2,100,200,100,metal,60
+1002,100002,job2,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60
+1002,100003,job2,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60

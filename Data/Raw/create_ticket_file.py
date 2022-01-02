@@ -7,7 +7,7 @@ data = {'external_id': 1001,
         'internal_id': 100001,
         'job_site': 'name',
         'date': today_date,
-        'employees': ['Gerardo Sandoval', 'Fred Barker'],
+        'employees': 'Gerardo Sandoval, Fred Barker',
         'num_of_employees': 2,
         'tare_weight': 100,
         'gross_weight': 200,
@@ -15,8 +15,8 @@ data = {'external_id': 1001,
         'material_type': 'metal',
         'rate': 60}
 
-df = pd.DataFrame(data)
+df = pd.DataFrame(data, index=[0])
 print(df)
 
-df.to_csv('Tickets.csv', sep=',', header=True)
+df.to_csv('Tickets.csv', sep=',', header=True, index=False)
 
