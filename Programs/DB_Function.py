@@ -4,9 +4,10 @@ import tkinter as tk
 from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
-import DB_Objects as db
+import Objects as db
 
 def get_values(*args):
+    """Gets values from ticket entry GUI"""
     fields = ['ticket_number', 'job_site', 'date', 'employees',
               'tare_weight', 'gross_weight', 'net_weight',
               'material_type', 'rate']
@@ -19,7 +20,7 @@ def get_values(*args):
     perform_checks(data_entered)
 
 def next_ticket_id():
-    latest_internal_id = list(pd.read_csv('Data/Raw/Tickets.csv')['internal_id'])[-1]
+    latest_internal_id = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])[-1]
     new_internal_id = int(latest_internal_id) + 1
     print(latest_internal_id)
     print(new_internal_id)
@@ -33,12 +34,12 @@ def perform_checks(data_dict):
 def check_internal_id(data_dict):
     internal_id = data_dict['internal_id']
     # internal_id = 100003
-    all_internal_ids = list(pd.read_csv('Data/Raw/Tickets.csv')['internal_id'])
+    all_internal_ids = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])
     # print(internal_id)
     # print(all_internal_ids)
     if internal_id in all_internal_ids:
         # These next two lines prevent a background window from appearing
-        #window = tk.Tk()
+        #window = tk.Tk(how to set up a databse for small business)
         #window.wm_withdraw()
         message = 'You are creating a duplicate internal id'
         messagebox.showwarning(title='Internal ID',
@@ -113,9 +114,9 @@ def create_ticket():
 
 
 def main():
-    #create_ticket()
-    next_ticket_id()
-    check_internal_id()
+    create_ticket()
+    #next_ticket_id()
+    #check_internal_id()
 
 
 if __name__=='__main__':
