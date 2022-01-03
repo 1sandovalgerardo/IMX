@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
+from IPython import embed # embed()
 import Objects as db
 
 def get_values(*args):
