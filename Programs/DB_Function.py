@@ -67,6 +67,14 @@ def get_companies():
     #print(list_of_companies)
     return list_of_companies
 
+def get_jobsite_details():
+    data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    jobsite_data = data
+    list_jobsite_ids = jobsite_data.loc[jobsite_data['company_name']==company_name]
+    list_jobsite_ids = list_jobsite_ids[['company_name', 'jobsite_name', 'jobsite_id']]
+    jobsite_names_ids = list_jobsite_ids[['jobsite_name', 'jobsite_id']]
+    return data
+
 def create_ticket():
     master_window = tk.Tk()
     tk.Label(master_window, text='Ticket Number').grid(row=0)
