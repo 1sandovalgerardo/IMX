@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import DB_Function as db
 import pandas as pd
 
@@ -16,11 +17,21 @@ def jobsite_for_dropdown(company_name):
     jobsite_details = get_jobsites(company_name)
     jobsite_values = jobsite_details[['jobsite_name', 'jobsite_id']]
     dropdown_values = []
+    # Merge two values into one string
     for site_name, site_id in jobsite_values.values:
         dropdown_values.append(f'{site_name} {site_id}')
     return dropdown_values
 
-def company_window():
+def get_paired_company_jobsite():
+    data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    companies = data['company_name'].unique()
+    jobsites = []
+    for value in companies:
+        jobsites_at_company = data.loc[data['company_name']==value]['jobsite_name']
+        jobsites.append(jobsites_at_company.to_list())
+    return (companies.tolist(), jobsites)
+
+def master_window():
     master_window = tk.Tk()
     tk.Label(master_window, text = 'Company Name').grid(row=0)
 
@@ -31,34 +42,62 @@ def company_window():
     # initial value of dropdown menu
     selected_company.set('Select Company')
     # creates the dropdown menu
-    company_name = tk.OptionMenu(master_window, selected_company, *company_options)
-    company_name.grid(row=1, column=1)
+    #company_name = tk.OptionMenu(master_window, selected_company, *company_options)
+    #company_name.grid(row=1, column=1)
+    ## alternate for combobox
+    company_name = ttk.Combobox(master_window, value=(company_options))
+    company_name.grid(row=1, column=1, columnspan=2, sticky='w')
+    # Create company_names(list):
+    # matching index based jobsite list
+    company_names, jobsites = get_paired_company_jobsite()
+    def callback(eventObject):
+        abc = eventObject.widget.get()
+        company_selected = company_name.get()
+        index = company_names.index(company_selected)
+        company_jobsite.config(values=jobsites[index])
+    company_jobsite = ttk.Combobox(master_window, width=37)
+    company_jobsite.grid(row=2, column=1, columnspan=2, sticky='w')
+    company_jobsite.bind('<Button-1>', callback)
 
-    # job site code
-    list_jobsites = get_jobsites()
 
     tk.Button(master_window, text='Enter Data',
               command=lambda:get_company(selected_company)).grid(row=2, column=1, sticky=tk.W,
                                                              pady=4)
     master_window.mainloop()
 
-def master_window():
-    master_window = tk.Tk()
-    tk.Label(master_window, text = 'Company Name').grid(row=0)
 
-    company_options = db.get_companies()
-    selected_company = tk.StringVar()
-    selected_company.set('Select Company')
-    company_name = tk.OptionMenu(master_window, selected_company, *company_options)
-    company_name.grid(row=1, column=1)
+def example():
+    from tkinter import ttk
 
-    tk.Button(master_window, text='Enter Data',
-              command=lambda:get_company(selected_company)).grid(row=2, column=1, sticky=tk.W,
-                                                                 pady=4)
-    master_window.mainloop()
+    root = tk.Tk()
+    ''' 
+    widgets are added here 
+    '''
+    brands = ["Bugatti","VW","Opel","Porsche"]
+
+    models = [["Veyron","Chiron"],
+              ["Golf","Passat","Polo","Caddy"],
+              ["Insignia","Corsa","Astra"],
+              ["Taycan","Cayenne","911"]]
+
+    car_brand = ttk.Combobox(root, width=37, value=(brands))
+    car_brand.grid(row=3, column=1, columnspan=2, padx=10, pady=2, sticky='w')
+
+    def callback(eventObject):
+        abc = eventObject.widget.get()
+        car = car_brand.get()
+        index=brands.index(car)
+        car_model.config(values=models[index])
+
+    car_model = ttk.Combobox(root, width=37)
+    car_model.grid(row=4, column=1, columnspan=2, padx=10, pady=2, sticky='w')
+    car_model.bind('<Button-1>', callback)
+
+    root.mainloop()
 
 def main():
-    jobsite_for_dropdown('Scrap Inc')
+    #master_window()
+    get_paired_company_jobsite()
 
 if __name__=='__main__':
     main()
