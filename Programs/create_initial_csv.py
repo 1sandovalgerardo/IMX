@@ -61,7 +61,7 @@ def create_jobsite(**kwargs):
                  'site_rate', 'active_site']
     company_df = pd.DataFrame(data=job_site_data, columns=col_names)
     print(company_df)
-    company_df.to_csv('../Data/Raw/Jobsite.csv', sep=',', header=True,
+    company_df.to_csv('../Data/Raw/Jobsite.csv', sep=',', header=False,
                       index=False, mode='a')
 
 
