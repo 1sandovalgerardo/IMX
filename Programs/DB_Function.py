@@ -114,6 +114,8 @@ def weight_warning_box():
                            message=message)
     #warning_window.mainloop()
 
+#### Program Logic ####
+
 def create_ticket():
     master_window = tk.Tk()
     tk.Label(master_window, text='Ticket Number').grid(row=0)
@@ -180,7 +182,6 @@ def create_ticket():
               command=lambda: get_values(ticket_number,
                                          selected_company,
                                          company_jobsite,
-                                         #job_site,
                                          date,
                                          employees,
                                          tare_weight,
