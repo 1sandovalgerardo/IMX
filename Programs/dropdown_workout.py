@@ -42,17 +42,20 @@ def master_window():
     # initial value of dropdown menu
     selected_company.set('Select Company')
     # creates the dropdown menu
-    #company_name = tk.OptionMenu(master_window, selected_company, *company_options)
-    #company_name.grid(row=1, column=1)
+    company_name = tk.OptionMenu(master_window, selected_company, *company_options)
+    company_name.grid(row=1, column=1)
     ## alternate for combobox
-    company_name = ttk.Combobox(master_window, value=(company_options))
-    company_name.grid(row=1, column=1, columnspan=2, sticky='w')
+    #company_name = ttk.Combobox(master_window, value=(company_options))
+    #company_name.grid(row=1, column=1, columnspan=2, sticky='w')
     # Create company_names(list):
     # matching index based jobsite list
     company_names, jobsites = get_paired_company_jobsite()
     def callback(eventObject):
         abc = eventObject.widget.get()
-        company_selected = company_name.get()
+        # for OptionMenu version
+        company_selected = selected_company.get()
+        ## for combobox version
+        #company_selected = company_name.get()
         index = company_names.index(company_selected)
         company_jobsite.config(values=jobsites[index])
     company_jobsite = ttk.Combobox(master_window, width=37)
@@ -96,8 +99,7 @@ def example():
     root.mainloop()
 
 def main():
-    #master_window()
-    get_paired_company_jobsite()
+    master_window()
 
 if __name__=='__main__':
     main()
