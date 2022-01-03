@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
+from IPython import embed # embed()
 import Objects as db
 
 def get_values(*args):
@@ -67,6 +69,23 @@ def get_companies():
     #print(list_of_companies)
     return list_of_companies
 
+def get_jobsite_details():
+    data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    jobsite_data = data
+    list_jobsite_ids = jobsite_data.loc[jobsite_data['company_name']==company_name]
+    list_jobsite_ids = list_jobsite_ids[['company_name', 'jobsite_name', 'jobsite_id']]
+    jobsite_names_ids = list_jobsite_ids[['jobsite_name', 'jobsite_id']]
+    return data
+
+def get_paired_company_jobsite():
+    local_data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    companies = local_data['company_name'].unique()
+    jobsites = []
+    for value in companies:
+        jobsites_at_company = local_data.loc[local_data['company_name']==value]['jobsite_name']
+        jobsites.append(jobsites_at_company.to_list())
+    return (companies.tolist(), jobsites)
+
 def create_ticket():
     master_window = tk.Tk()
     tk.Label(master_window, text='Ticket Number').grid(row=0)
@@ -87,28 +106,43 @@ def create_ticket():
     selected_company = tk.StringVar()
     selected_company.set('Select Company')
 
-    ticket_number = tk.Entry(master_window)
+    # combobox for jobsites
+    company_names, jobsites = get_paired_company_jobsite()
+    def callback(eventObject):
+        abc = eventObject.widget.get()
+        # for OptionMenu version
+        company_selected = selected_company.get()
+        index = company_names.index(company_selected)
+        company_jobsite.config(values=jobsites[index])
+
+    # dropdown for material types
+    metal_options = ['rebar', 'upsteel', 'wire', 'hourly']
+    selected_metal = tk.StringVar()
+    selected_metal.set('Select Metal')
+
+    ticket_number = tk.Entry(master_window, width=37)
     company_name = tk.OptionMenu(master_window, selected_company, *company_options)
-    job_site = tk.Entry(master_window)
-    date = tk.Entry(master_window)
-    employees = tk.Entry(master_window)
-    tare_weight = tk.Entry(master_window)
-    gross_weight = tk.Entry(master_window)
-    net_weight = tk.Entry(master_window)
-    material_type = tk.Entry(master_window)
-    rate = tk.Entry(master_window)
+    company_jobsite = ttk.Combobox(master_window, width=37)
+    date = tk.Entry(master_window, width=37)
+    employees = tk.Entry(master_window, width=37)
+    tare_weight = tk.Entry(master_window, width=37)
+    gross_weight = tk.Entry(master_window, width=37)
+    net_weight = tk.Entry(master_window, width=37)
+    material_type = tk.OptionMenu(master_window, selected_metal, *metal_options)
+    rate = tk.Entry(master_window, width=37)
 
     ticket_number.grid(row=0, column=1)
-    company_name.grid(      row=1, column=1)
-    job_site.grid(     row=2, column=1)
+    company_name.grid( row=1, column=1, sticky='w')
+    company_jobsite.grid(row=2, column=1)
     date.grid(         row=3, column=1)
     employees.grid(    row=4, column=1)
     tare_weight.grid(  row=5, column=1)
     gross_weight.grid( row=6, column=1)
     net_weight.grid(   row=7, column=1)
-    material_type.grid(row=8, column=1)
+    material_type.grid(row=8, column=1, sticky='w')
     rate.grid(         row=9, column=1)
 
+    company_jobsite.bind('<Button-1>', callback)
 
     tk.Button(master_window,
               text='Quit',
@@ -117,13 +151,14 @@ def create_ticket():
               text='Enter Data',
               command=lambda: get_values(ticket_number,
                                          selected_company,
-                                         job_site,
+                                         company_jobsite,
+                                         #job_site,
                                          date,
                                          employees,
                                          tare_weight,
                                          gross_weight,
                                          net_weight,
-                                         material_type,
+                                         selected_metal,
                                          rate)).grid(row=10, column=1, sticky=tk.W, pady=4)
 
     master_window.mainloop()

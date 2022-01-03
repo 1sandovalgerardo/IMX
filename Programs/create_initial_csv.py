@@ -69,22 +69,22 @@ def job_site_main():
     create_jobsite(company_name='Scrap Inc',
                    company_id=1001,
                    jobsite_name='Site1',
-                   jobsite_id=1,
+                   jobsite_id=101,
                    active_site=True)
     create_jobsite(company_name='Scrap Inc',
                    company_id=1001,
                    jobsite_name='Site2',
-                   jobsite_id=2,
+                   jobsite_id=102,
                    active_site=True)
     create_jobsite(company_name='Scrap2 Inc',
                    company_id=1002,
                    jobsite_name='Site1',
-                   jobsite_id=1,
+                   jobsite_id=101,
                    active_site=True)
     create_jobsite(company_name='Big Inc',
                    company_id=1003,
                    jobsite_name='Site1',
-                   jobsite_id=1,
+                   jobsite_id=101,
                    active_site=True)
 
 
