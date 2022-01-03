@@ -1,0 +1,5 @@
+company_name,company_id,jobsite_name,jobsite_id,site_rate,active_site
+Scrap Inc,1001,Site1,1,"{'rebar_rate': '10', 'upsteel_rate': '10', 'wire_rate': '10', 'hourly_rate': '10'}",True
+Scrap Inc,1001,Site2,2,"{'rebar_rate': '15', 'upsteel_rate': '15', 'wire_rate': '15', 'hourly_rate': '15'}",True
+Scrap2 Inc,1002,Site1,1,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
+Big Inc,1003,Site1,1,"{'rebar_rate': '25', 'upsteel_rate': '25', 'wire_rate': '25', 'hourly_rate': '25'}",True
