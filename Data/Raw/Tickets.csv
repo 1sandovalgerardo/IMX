@@ -6,3 +6,4 @@ external_id,internal_id,company_name,job_site,date,employees,num_of_employees,ta
 1002,100005,Big Inc,Big 2,2022-01-02,"john, sam, gerardo sandoval",3,1000,2000,1000,rebar,25
 1111,100006,Big Inc,Big 3,2021-01-02,"gerardo sandoval, fred barker, heather barker",3,1000,2000,1000,wire,30
 1112,100007,Big Inc,Big 3,2021-01-02,gerardo sandoval,1,0,0,0,hourly,200
+0,100008,Scrap Inc,Scrap Site2,0,john,1,0,0,0,Select Metal,0

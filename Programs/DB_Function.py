@@ -16,8 +16,9 @@ def get_values(*args):
               'material_type', 'rate']
     data_entered = defaultdict()
     for variable, value in zip(fields, args):
-        print(f'The item: {variable}.    The Value: {value.get()}')
-        data_entered[variable] = value.get()
+        print(f'The item: {variable}.    The Value: {value.get() if value.get()!= "" else 0}')
+
+        data_entered[variable] = value.get() if value.get() != '' else 0
     print('values entered to dictionary')
     data_entered['internal_id'] = next_ticket_id()
     perform_checks(data_entered)
@@ -126,8 +127,9 @@ def create_ticket():
     tk.Label(master_window, text='Tare Weight').grid(row=5)
     tk.Label(master_window, text='Gross Weight').grid(row=6)
     tk.Label(master_window, text='Net Weight').grid(row=7)
-    tk.Label(master_window, text='Material Type').grid(row=8)
-    tk.Label(master_window, text='Rate').grid(row=9)
+    tk.Label(master_window, text='Hourly Rate').grid(row=8)
+    tk.Label(master_window, text='Material Type').grid(row=9)
+    tk.Label(master_window, text='Rate').grid(row=10)
 
     # create companies dropdown menu
     def company_show():
@@ -158,6 +160,7 @@ def create_ticket():
     tare_weight = tk.Entry(master_window, width=37)
     gross_weight = tk.Entry(master_window, width=37)
     net_weight = tk.Entry(master_window, width=37)
+    hours_worked = tk.Entry(master_window, width=37)
     material_type = tk.OptionMenu(master_window, selected_metal, *metal_options)
     rate = tk.Entry(master_window, width=37)
 
@@ -169,14 +172,15 @@ def create_ticket():
     tare_weight.grid(  row=5, column=1)
     gross_weight.grid( row=6, column=1)
     net_weight.grid(   row=7, column=1)
-    material_type.grid(row=8, column=1, sticky='w')
-    rate.grid(         row=9, column=1)
+    hours_worked.grid( row=8, column=1)
+    material_type.grid(row=9, column=1, sticky='w')
+    rate.grid(         row=10, column=1)
 
     company_jobsite.bind('<Button-1>', callback)
 
     tk.Button(master_window,
               text='Quit',
-              command=master_window.quit).grid(row=10, column=0, sticky=tk.W, pady=4)
+              command=master_window.quit).grid(row=11, column=0, sticky=tk.W, pady=4)
     tk.Button(master_window,
               text='Enter Data',
               command=lambda: get_values(ticket_number,
@@ -188,7 +192,7 @@ def create_ticket():
                                          gross_weight,
                                          net_weight,
                                          selected_metal,
-                                         rate)).grid(row=10, column=1, sticky=tk.W, pady=4)
+                                         rate)).grid(row=11, column=1, sticky=tk.W, pady=4)
 
     master_window.mainloop()
 
