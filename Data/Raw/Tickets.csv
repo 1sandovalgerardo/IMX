@@ -1,4 +1,8 @@
-external_id,internal_id,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,material_type,rate
-1001,100001,name,2021-12-31,"Gerardo Sandoval, Fred Barker",2,100,200,100,metal,60
-1002,100002,job2,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60
-1002,100003,job2,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60
+external_id,internal_id,company_name,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,material_type,rate
+1001,100001,company1,name,2021-12-31,"Gerardo Sandoval, Fred Barker",2,100,200,100,metal,60
+1002,100002,company2,job2,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60
+1002,100003,Chicago,Site 1,2021-12-31,"Heather Barker, Amy Sandoval",2,1000,2000,1000,metal,60
+1001,100004,Big Inc,Big 1,2022-01-02,"john, sam",2,100,200,100,rebar,25
+1002,100005,Big Inc,Big 2,2022-01-02,"john, sam, gerardo sandoval",3,1000,2000,1000,rebar,25
+1111,100006,Big Inc,Big 3,2021-01-02,"gerardo sandoval, fred barker, heather barker",3,1000,2000,1000,wire,30
+1112,100007,Big Inc,Big 3,2021-01-02,gerardo sandoval,1,0,0,0,hourly,200
