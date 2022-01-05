@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
+from csv import writer
 from IPython import embed # embed()
 import Objects as db
 
@@ -20,6 +21,15 @@ def get_values(*args):
     print('values entered to dictionary')
     data_entered['internal_id'] = next_ticket_id()
     perform_checks(data_entered)
+    save_ticket_data(data_entered)
+
+def save_ticket_data(ticket_data):
+    data_to_save = clean_ticket_data(ticket_data)
+    with open('../Data/Raw/Tickets.csv', 'a') as ticket_file:
+        writer_object = writer(ticket_file)
+        writer_object.writerow(data_to_save)
+
+#### Functions for ticket entry ####
 
 def next_ticket_id():
     latest_internal_id = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])[-1]
@@ -28,6 +38,47 @@ def next_ticket_id():
     print(new_internal_id)
     return (new_internal_id)
 
+def clean_ticket_data(ticket_data):
+    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'job_site',
+                     'date', 'employees', 'num_of_employees', 'tare_weight',
+                     'gross_weight', 'net_weight', 'material_type', 'rate']
+    clean_list = []
+    for key in order_of_keys:
+        if key == 'ticket_number':
+            clean_list.append(ticket_data['ticket_number'])
+        elif key == 'num_of_employees':
+            employees = ticket_data['employees'].split(',')
+            clean_list.append(len(employees))
+        else:
+            clean_list.append(ticket_data[key])
+    #print(clean_list)
+    return clean_list
+
+
+def get_companies():
+    data = pd.read_csv('../Data/Raw/Companies.csv')
+    list_of_companies = list(data['company_name'])
+    #print(list_of_companies)
+    return list_of_companies
+
+def get_jobsite_details():
+    data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    jobsite_data = data
+    list_jobsite_ids = jobsite_data.loc[jobsite_data['company_name']==company_name]
+    list_jobsite_ids = list_jobsite_ids[['company_name', 'jobsite_name', 'jobsite_id']]
+    jobsite_names_ids = list_jobsite_ids[['jobsite_name', 'jobsite_id']]
+    return data
+
+def get_paired_company_jobsite():
+    local_data = pd.read_csv('../Data/Raw/Jobsite.csv')
+    companies = local_data['company_name'].unique()
+    jobsites = []
+    for value in companies:
+        jobsites_at_company = local_data.loc[local_data['company_name']==value]['jobsite_name']
+        jobsites.append(jobsites_at_company.to_list())
+    return (companies.tolist(), jobsites)
+
+#### Safety Checks ####
 def perform_checks(data_dict):
     print('in perform_checks')
     check_weights(data_dict)
@@ -63,28 +114,7 @@ def weight_warning_box():
                            message=message)
     #warning_window.mainloop()
 
-def get_companies():
-    data = pd.read_csv('../Data/Raw/Companies.csv')
-    list_of_companies = list(data['company_name'])
-    #print(list_of_companies)
-    return list_of_companies
-
-def get_jobsite_details():
-    data = pd.read_csv('../Data/Raw/Jobsite.csv')
-    jobsite_data = data
-    list_jobsite_ids = jobsite_data.loc[jobsite_data['company_name']==company_name]
-    list_jobsite_ids = list_jobsite_ids[['company_name', 'jobsite_name', 'jobsite_id']]
-    jobsite_names_ids = list_jobsite_ids[['jobsite_name', 'jobsite_id']]
-    return data
-
-def get_paired_company_jobsite():
-    local_data = pd.read_csv('../Data/Raw/Jobsite.csv')
-    companies = local_data['company_name'].unique()
-    jobsites = []
-    for value in companies:
-        jobsites_at_company = local_data.loc[local_data['company_name']==value]['jobsite_name']
-        jobsites.append(jobsites_at_company.to_list())
-    return (companies.tolist(), jobsites)
+#### Program Logic ####
 
 def create_ticket():
     master_window = tk.Tk()
@@ -152,7 +182,6 @@ def create_ticket():
               command=lambda: get_values(ticket_number,
                                          selected_company,
                                          company_jobsite,
-                                         #job_site,
                                          date,
                                          employees,
                                          tare_weight,
