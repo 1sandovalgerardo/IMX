@@ -12,8 +12,9 @@ def run_report_gui():
     tk.Label(master_window, text='Select Job Site').grid(row=2)
 
     # Create companies dropdown menu
-    def company_show():
-        tk.label.config(text=clicked.get())
+    ## I commented out this function. I'm not sure if it does anything.
+    #def company_show():
+    #    tk.label.config(text=clicked.get())
     # company_options
     list_of_companies = utils.get_companies()
     selected_company = tk.StringVar()
