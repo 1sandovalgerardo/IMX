@@ -20,8 +20,8 @@ def get_paired_company_jobsite():
 
 def main():
     a = get_paired_company_jobsite()
-    for row in a:
-        print(row)
+    print(a[0])
+    print(a[1])
 
 if __name__=='__main__':
     main()
