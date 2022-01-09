@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# test updating local branch
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -56,6 +56,7 @@ def clean_ticket_data(ticket_data):
     return clean_list
 
 
+# This can be replaced with imx_utils.get_companies()
 def get_companies():
     data = pd.read_csv('../Data/Raw/Companies.csv')
     list_of_companies = list(data['company_name'])
