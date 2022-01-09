@@ -4,6 +4,19 @@ import tkinter as tk
 from tkinter import ttk
 import IMX_Utils as utils
 
+#### Need ####
+## Revenue by ticket
+## Revenue for company by day
+## Contractor pay by ticket
+## Contractor pay by day
+
+## Select Company
+## Revenue by ticket
+##  Revenue for day
+
+def days_revenue(company, date):
+    pass
+
 def run_report_gui():
     master_window = tk.Tk()
 
