@@ -73,8 +73,10 @@ def days_tickets(company, desired_date):
     data = pd.read_csv('../Data/Raw/Tickets.csv')
     # Make date column datetime objects
     data['date'] = pd.to_datetime(data['date'],yearfirst=True, format='%Y-%m-%d').dt.date
-    desired_date = list(map(int, desired_date.split(sep='-')))
-    desired_date = dt.date(desired_date[0], desired_date[1], desired_date[2])
+    if isinstance(desired_date, str):
+        print('in if for days_tickets')
+        desired_date = list(map(int, desired_date.split(sep='-')))
+        desired_date = dt.date(desired_date[0], desired_date[1], desired_date[2])
     return_data = data.loc[(data['date'] == desired_date) & (data['company_name']==company)]
     list_of_tickets = list(return_data['external_id'])
     logging.debug('days_tickets() ended')
@@ -87,12 +89,13 @@ def multiday_revenue(company, start_date, end_date):
     number_of_days = start_date - end_date
     number_of_days = abs(int(number_of_days.days))
     list_of_dates = [(start_date+timedelta(days=n)).date() for n in range(number_of_days)]
+    revenue_for_time_period = 0
     for date in list_of_dates:
-        print(type(date))
-        print(days_revenue(company, str(date)))
-    ## I have a list of dates that is working.
-    ## I now need to loop and pass each date to days_revenue to
-    ## get the total revenue for the selected number of days
+        logging.debug(f'Revenue for: {date}')
+        logging.debug(days_revenue(company, date))
+        revenue_for_time_period += days_revenue(company, date)
+    print(revenue_for_time_period)
+    return revenue_for_time_period
 
 
 def days_revenue(company, a_date):

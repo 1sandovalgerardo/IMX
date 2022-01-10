@@ -15,3 +15,4 @@ external_id,internal_id,company_name,job_site,date,employees,num_of_employees,ta
 1014,100012,Total,Site 2,2022-01-02,"Heather Barker, Amy Sandoval",2,1000,2000,1000,0,metal,60
 1015,100013,Total,Site 2,2022-01-02,john,1,0,0,0,10,hourly,200
 1016,100014,Total,Site 2,2022-01-02,john,1,0,0,0,5,hourly,100
+1017,100015,Total,Site 2,2022-01-03,"Heather Barker, Amy Sandoval",2,1000,2000,1000,0,metal,60
