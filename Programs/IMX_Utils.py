@@ -27,14 +27,19 @@ def create_log(debug):
 
 
 def get_companies():
+    """ Returns a list of companies found in the Companies.csv file"""
     logging.debug('get_companies() called')
     data = pd.read_csv('../Data/Raw/Companies.csv')
     list_of_companies = list(data['company_name'])
-    #print(list_of_companies)
+    logging.debug(list_of_companies)
     logging.debug('get_companies() ended')
     return list_of_companies
 
 def get_paired_company_jobsite():
+    """ Returns a tuple of two values. Each value is a list.
+        The purpose of this is to have a company and jobsite list that are at the same
+        index position within their respective list.
+        This is for functionality of the drop down menus within the gui."""
     logging.debug('get_paired_company_jobsite() called')
     jobsite_data = pd.read_csv('../Data/Raw/Jobsite.csv')
     list_of_companies = get_companies()
@@ -82,13 +87,20 @@ def days_tickets(company, desired_date):
     logging.debug('days_tickets() ended')
     return list_of_tickets
 
-##### Functions for run_daily ####
+#### Functions for run_daily ####
+
+
 def multiday_revenue(company, start_date, end_date):
+    """Returns the total revenue generated at a company over specified day.
+    Will include revenue for end date."""
+    # make start and end dates date objects
     start_date =  parser.parse(start_date)
     end_date = parser.parse(end_date)
+    # determine date range
     number_of_days = start_date - end_date
     number_of_days = abs(int(number_of_days.days))
-    list_of_dates = [(start_date+timedelta(days=n)).date() for n in range(number_of_days)]
+    # generate the list of desired dates
+    list_of_dates = [(start_date+timedelta(days=n)).date() for n in range(number_of_days + 1)]
     revenue_for_time_period = 0
     for date in list_of_dates:
         logging.debug(f'Revenue for: {date}')
