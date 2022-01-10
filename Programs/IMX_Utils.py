@@ -125,6 +125,20 @@ def days_revenue(company, a_date):
     return total_revenue
 
 
+#### Functions for run_scrapsplit ####
+
+
+def get_employees():
+    """ Returns a list of companies found in Employees.csv"""
+    logging.debug('get_employees() called')
+    data = pd.read_csv('../Data/Raw/Employees.csv')
+    data['employee_id'] = list(map(str, data['employee_id']))
+    employee_var = data[['employee_id', 'first_name', 'last_name']]
+    id_employee_list = [' '.join(x) for x in employee_var.values]
+    return id_employee_list
+
+
+
 
 
 
@@ -134,7 +148,11 @@ def main():
     #daily_revenue = days_revenue('Scrap Inc', '2022-01-02')
     #print(daily_revenue)
 
-    multiday_revenue('Total', '2022-1-1', '2022-1-5')
+    ## Test multiday_revenue
+    #multiday_revenue('Total', '2022-1-1', '2022-1-5')
+
+    ## Test get_employees
+    get_employees()
 
 
 
