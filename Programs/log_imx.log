@@ -1,15 +1,55 @@
 DEBUG: root: logging established
 DEBUG: root: days_revenue() called
 DEBUG: root: days_tickets() called
+DEBUG: root: days_tickets() ended
+DEBUG: root: Tickets for desired date:
+DEBUG: root: []
+DEBUG: root: days_revenue() ended
+DEBUG: root: days_revenue() called
+DEBUG: root: days_tickets() called
+DEBUG: root: days_tickets() ended
+DEBUG: root: Tickets for desired date:
+DEBUG: root: [1011, 1012, 1013, 1014, 1015, 1016]
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1011
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1012
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1013
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1014
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1015
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: Ticket #: 1016
 DEBUG: root: ticket_revenue() called
+DEBUG: root: ticket_revenue() ended
+DEBUG: root: days_revenue() ended
+DEBUG: root: days_revenue() called
+DEBUG: root: days_tickets() called
+DEBUG: root: days_tickets() ended
+DEBUG: root: Tickets for desired date:
+DEBUG: root: []
+DEBUG: root: days_revenue() ended
+DEBUG: root: days_revenue() called
+DEBUG: root: days_tickets() called
+DEBUG: root: days_tickets() ended
+DEBUG: root: Tickets for desired date:
+DEBUG: root: []
+DEBUG: root: days_revenue() ended

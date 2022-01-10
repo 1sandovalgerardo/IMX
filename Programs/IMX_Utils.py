@@ -2,7 +2,10 @@
 
 import pandas as pd
 import datetime as dt
+from datetime import timedelta
 import logging
+from dateutil import parser
+
 
 def create_log(debug):
     if debug:
@@ -51,8 +54,6 @@ def ticket_revenue(ticket_number):
     # filter data for specific ticket number
     ticket_data = ticket_data.loc[ticket_data['external_id']==ticket_number]
     type_of_material = str(ticket_data['material_type'])
-    print('Material Weight:')
-    print(ticket_data['net_weight'])
     material_weight = float(ticket_data['net_weight'])
     rate = float(ticket_data['rate'])
     if material_weight == 0:
@@ -64,7 +65,10 @@ def ticket_revenue(ticket_number):
     return revenue
 
 def days_tickets(company, desired_date):
-    '''returns a list of tickets for a specific company and day'''
+    '''returns a list of tickets for a specific company and day
+    args:
+        company(string): company should be listed in companies.csv
+        desired_date(string): make sure to pass in a string and not date object'''
     logging.debug('days_tickets() called')
     data = pd.read_csv('../Data/Raw/Tickets.csv')
     # Make date column datetime objects
@@ -76,28 +80,47 @@ def days_tickets(company, desired_date):
     logging.debug('days_tickets() ended')
     return list_of_tickets
 
+##### Functions for run_daily ####
+def multiday_revenue(company, start_date, end_date):
+    start_date =  parser.parse(start_date)
+    end_date = parser.parse(end_date)
+    number_of_days = start_date - end_date
+    number_of_days = abs(int(number_of_days.days))
+    list_of_dates = [(start_date+timedelta(days=n)).date() for n in range(number_of_days)]
+    for date in list_of_dates:
+        print(type(date))
+        print(days_revenue(company, str(date)))
+    ## I have a list of dates that is working.
+    ## I now need to loop and pass each date to days_revenue to
+    ## get the total revenue for the selected number of days
+
+
 def days_revenue(company, a_date):
     logging.debug('days_revenue() called')
     tickets_for_date = days_tickets(company, a_date)
     total_revenue = 0
-    #print('Tickets for desired date:')
-    #print(tickets_for_date)
+    logging.debug('Tickets for desired date:')
+    logging.debug(tickets_for_date)
     for ticket in tickets_for_date:
         revenue = ticket_revenue(ticket)
         #print(revenue)
-        print(f'Ticket #: {ticket}')
+        logging.debug(f'Ticket #: {ticket}')
         total_revenue += ticket_revenue(ticket)
-    #print('Total Revenue:')
-    #print(total_revenue)
     logging.debug('days_revenue() ended')
     return total_revenue
 
 
 
+
+
 def main():
     create_log(True)
-    daily_revenue = days_revenue('Scrap Inc', '2022-01-02')
-    print(daily_revenue)
+    ## test daily revenue
+    #daily_revenue = days_revenue('Scrap Inc', '2022-01-02')
+    #print(daily_revenue)
+
+    multiday_revenue('Total', '2022-1-1', '2022-1-5')
+
 
 
 if __name__=='__main__':
