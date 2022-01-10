@@ -64,6 +64,10 @@ class Ticket(object):
         self.rate = rate
         self.rate_per_employee = rate_per_employee
 
+class DailyReport(object):
+    """Purpose will be to store important values needed for daily report and
+    generate a presentation file."""
+    None
 
 
 def main():
