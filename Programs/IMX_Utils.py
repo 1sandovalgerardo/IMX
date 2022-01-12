@@ -128,7 +128,7 @@ def days_revenue(company, a_date):
 #### Functions for run_scrapsplit ####
 
 
-def get_employees():
+def get_contractors():
     """ Returns a list of companies found in Employees.csv"""
     logging.debug('get_employees() called')
     data = pd.read_csv('../Data/Raw/Employees.csv')
@@ -137,7 +137,41 @@ def get_employees():
     id_employee_list = [' '.join(x) for x in employee_var.values]
     return id_employee_list
 
+def contractor_daily_pay(first_name, last_name):
+    data = pd.read_csv('../Data/Raw/Tickets.csv')
+    first_name = first_name.title()
+    last_name = last_name.title()
+    contractors_tickets = []
+    data_for_rate = []
+    for index, row in data.iterrows():
+        ticket_id = row['external_id']
+        contractors_on_ticket = row['employees'].split(',')
+        for name in contractors_on_ticket:
+            if first_name.lower() in name.lower() and last_name.lower() in name.lower():
+                weight_to_contractor = round(float(row['net_weight']) / float(row['num_of_employees']), 3)
+                if row['material_type'] == 'hourly':
+                    print('hourly material')
+                    hours_to_contractor = round(float(row['hours_worked'])/float(row['num_of_employees']), 3)
+                    contractors_tickets.append([ticket_id,
+                                                f'{first_name} {last_name}',
+                                                row['material_type'],
+                                                row['hours_worked'],
+                                                row['num_of_employees'],
+                                                hours_to_contractor])
+                else:
+                    contractors_tickets.append([ticket_id,
+                                                f'{first_name} {last_name}',
+                                                row['material_type'],
+                                                row['net_weight'],
+                                                row['num_of_employees'],
+                                                weight_to_contractor])
+    for row in contractors_tickets:
+        print(row)
 
+
+
+def tickets_contractors_on(first_name, last_name):
+    ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
 
 
 
