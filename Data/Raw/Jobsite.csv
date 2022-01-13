@@ -1,10 +1,10 @@
-company_name,company_id,jobsite_name,jobsite_id,site_rate,active_site
-Scrap Inc,1001,Scrap Site1,101,"{'rebar_rate': '10', 'upsteel_rate': '10', 'wire_rate': '10', 'hourly_rate': '10'}",True
-Scrap Inc,1002,Scrap Site2,102,"{'rebar_rate': '15', 'upsteel_rate': '15', 'wire_rate': '15', 'hourly_rate': '15'}",True
-Scrap2 Inc,1002,Scrap2 Inc Site1,103,"{'rebar_rate': '10', 'upsteel_rate': '10', 'wire_rate': '10', 'hourly_rate': '10'}",True
-Big Inc,1003,Big 1,104,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
-Big Inc,1003,Big 2,105,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
-Big Inc,1003,Big 3,106,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
-Total,1004,Scrap Site2,107,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
-Total,1005,Site 1,108,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
-Total,1006,Site 2,109,"{'rebar_rate': '20', 'upsteel_rate': '20', 'wire_rate': '20', 'hourly_rate': '20'}",True
+company_name,company_id,jobsite_name,jobsite_id,rebar,upsteel,wire,hourly,active_site
+Scrap Inc,1001,Scrap Site1,101,10,20,30,100,True
+Scrap Inc,1002,Scrap Site2,102,11,21,31,101,True
+Scrap2 Inc,1002,Scrap2 Inc Site1,103,12,22,32,102,True
+Big Inc,1003,Big 1,104,13,23,33,103,True
+Big Inc,1003,Big 2,105,14,24,34,104,True
+Big Inc,1003,Big 3,106,15,25,35,105,True
+Total,1004,Scrap Site2,107,16,26,36,106,True
+Total,1005,Site 1,108,17,27,37,107,True
+Total,1006,Site 2,109,18,28,38,108,True
