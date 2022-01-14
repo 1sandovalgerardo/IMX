@@ -130,6 +130,7 @@ def days_revenue(company, a_date):
 
 def get_contractors():
     """ Returns a list of companies found in Employees.csv"""
+    ## I need to add logic to exclude contractors that are no longer active.
     logging.debug('get_employees() called')
     data = pd.read_csv('../Data/Raw/Employees.csv')
     data['employee_id'] = list(map(str, data['employee_id']))
@@ -137,12 +138,46 @@ def get_contractors():
     id_employee_list = [' '.join(x) for x in employee_var.values]
     return id_employee_list
 
-def contractor_daily_pay(first_name, last_name):
+
+def to_file(**kwargs):
+    start_date = str(kwargs['start_date'])
+    end_date = str(kwargs['end_date'])
+    contractor_name = kwargs['contractor_name'].split()
+    file_name = f'{start_date}_{end_date}_{"_".join(contractor_name)}.csv'
+    # the if to be able to use the function for other items
+    if kwargs['contractor_tickets']:
+        columns = ['external_id', 'date', 'contractor_name','material_type',
+                   'qty', 'num_of_employees', 'qty_to_contractor' ]
+        file_to_save = pd.DataFrame(kwargs['contractor_tickets'], columns=columns)
+        file_name = f'../Data/Reports_To_Process/{file_name}'
+        file_to_save.to_csv(file_name, sep=',', index=False)
+
+
+def filter_tickets_by_date(contractor_tickets, start_date, end_date):
+    select_tickets = []
+    if start_date == end_date:
+        for ticket in contractor_tickets:
+            if str(start_date) == ticket[1]:
+                select_tickets.append(ticket)
+    else:
+        number_of_days = start_date - end_date
+        number_of_days = abs(int(number_of_days.days))
+        # list of desired dates, inclusive
+        desired_dates = [(start_date + timedelta(days=n)) for n in range(number_of_days + 1)]
+        for date in desired_dates:
+            for ticket in contractor_tickets:
+                if str(date) == ticket[1]:
+                    select_tickets.append(ticket)
+    return select_tickets
+
+
+def tickets_contractors_on(first_name, last_name):
+    """Takes contractor first_name and las_name.
+    Returns a list of tickets that the contractor is on."""
     data = pd.read_csv('../Data/Raw/Tickets.csv')
     first_name = first_name.title()
     last_name = last_name.title()
     contractors_tickets = []
-    data_for_rate = []
     for index, row in data.iterrows():
         ticket_id = row['external_id']
         contractors_on_ticket = row['employees'].split(',')
@@ -150,9 +185,9 @@ def contractor_daily_pay(first_name, last_name):
             if first_name.lower() in name.lower() and last_name.lower() in name.lower():
                 weight_to_contractor = round(float(row['net_weight']) / float(row['num_of_employees']), 3)
                 if row['material_type'] == 'hourly':
-                    print('hourly material')
                     hours_to_contractor = round(float(row['hours_worked'])/float(row['num_of_employees']), 3)
                     contractors_tickets.append([ticket_id,
+                                                row['date'],
                                                 f'{first_name} {last_name}',
                                                 row['material_type'],
                                                 row['hours_worked'],
@@ -160,18 +195,33 @@ def contractor_daily_pay(first_name, last_name):
                                                 hours_to_contractor])
                 else:
                     contractors_tickets.append([ticket_id,
+                                                row['date'],
                                                 f'{first_name} {last_name}',
                                                 row['material_type'],
                                                 row['net_weight'],
                                                 row['num_of_employees'],
                                                 weight_to_contractor])
-    for row in contractors_tickets:
-        print(row)
+    return contractors_tickets
+
+def full_payroll(start_date, end_date):
+    contractor_list = get_contractors()
+    ticket_data = pd.read_csv('../Data/Raw/Tickets.csv', delimiter=',')
+    number_of_days = start_date - end_date
+    number_of_days = abs(int(number_of_days.days))
+    # list of desired dates, inclusive
+    desired_dates = [(start_date + timedelta(days=n)) for n in range(number_of_days + 1)]
+    select_tickets = []
+    for date in desired_dates:
+        test_rows = ticket_data[ticket_data['date'] == str(date)]
+        print(f'Desired Date: {date}')
+        print(test_rows)
 
 
 
-def tickets_contractors_on(first_name, last_name):
-    ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
+
+
+
+
 
 
 

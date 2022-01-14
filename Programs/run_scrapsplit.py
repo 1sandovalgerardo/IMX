@@ -8,13 +8,23 @@ from dateutil import parser
 
 def scrap_split_logic(*args):
     selected_contractor, start_date, end_date = args
+    start_date = parser.parse(start_date.get()).date()
+    end_date = parser.parse(end_date.get()).date() if end_date.get() != "" else start_date
     if selected_contractor.get() == 'All':
-        pass
+        # List of all active employees
+        # data for all tickets by date that our contractors have
+        utils.full_payroll(start_date, end_date)
     else:
         contractor_id, first_name, last_name = selected_contractor.get().split()
-        utils.contractor_daily_pay(first_name, last_name)
-    #start_date = parser.parse(start_date.get()).date()
-    #end_date = parser.parse(end_date.get()).date()
+        # filter by ticket and contractor
+        tickets_for_contractor = utils.tickets_contractors_on(first_name, last_name)
+        # filter by date -- can be merged later
+        tickets_for_contractor = utils.filter_tickets_by_date(tickets_for_contractor, start_date, end_date)
+        # write to file
+        utils.to_file(contractor_name=selected_contractor.get(),
+                      contractor_tickets=tickets_for_contractor,
+                      start_date = start_date,
+                      end_date = end_date)
 
 
 
