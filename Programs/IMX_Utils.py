@@ -28,7 +28,7 @@ def create_log(debug):
 
 def get_companies():
     """ Returns a list of companies found in the Companies.csv file"""
-    logging.debug('get_companies() called')
+    logging.info('get_companies() called')
     data = pd.read_csv('../Data/Raw/Companies.csv')
     list_of_companies = list(data['company_name'])
     logging.debug(list_of_companies)
@@ -127,7 +127,7 @@ def days_revenue(company, a_date):
 
 #### Functions for run_scrapsplit ####
 
-
+# TODO: need to add a filter to exclude contractors that are not active
 def get_contractors():
     """ Returns a list of companies found in Employees.csv"""
     ## I need to add logic to exclude contractors that are no longer active.

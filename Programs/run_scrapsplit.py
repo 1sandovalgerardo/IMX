@@ -49,6 +49,7 @@ def run_report_gui():
     def contractor_show():
         tk.label.config(text=clicked.get())
     contractor_options = utils.get_contractors()
+    # Create All option for drop down
     contractor_options.insert(0, 'All')
     selected_contractor = tk.StringVar()
     selected_contractor.set('Select contractor')
