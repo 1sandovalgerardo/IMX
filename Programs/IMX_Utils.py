@@ -216,6 +216,33 @@ def full_payroll(start_date, end_date):
         print(f'Desired Date: {date}')
         print(test_rows)
 
+def create_ticket_employee_table():
+    '''Used to establish Ticket_Contractor_Table.csv'''
+    data = pd.read_csv('../Data/Raw/Tickets.csv')
+    table_rows = []
+    for rows in data.values:
+        ticket_num = rows[0]
+        internal_id = rows[1]
+        all_contractors = rows[5].split(',')
+        for contractor in all_contractors:
+            contractor = contractor.strip().split(' ')
+            if len(contractor) == 2:
+                first_name, last_name = contractor
+                middle_name = ''
+            else:
+                first_name, middle_name, last_name = contractor
+            table_rows.append([ticket_num, internal_id, first_name, middle_name, last_name]) 
+    table_columns = ['external_id', 'internal_id', 'first_name','middle_name', 'last_name']
+    df_to_write = pd.DataFrame(table_rows, columns=table_columns)
+    df_to_write.to_csv('../Data/Raw/Ticket_Contractor_Table.csv', index=False, sep=',')
+
+
+#### Functions for entering hours contractor worked ####
+def enter_hrs_worked(**kwargs):
+    contractor_id = kwargs['contractor_id']
+    contractor_first_name = kwargs['contractor_first_name']
+    contractor_last_name = kwargs['contractor_last_name']
+    date_worked = kwargs['date']
 
 
 

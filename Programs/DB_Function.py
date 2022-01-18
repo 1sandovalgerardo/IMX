@@ -9,6 +9,11 @@ from csv import writer
 from IPython import embed # embed()
 import Objects as db
 
+# TODO: what if no net or gross weight is provided on the ticket
+#       I need to account for no value being entered into gross and tare
+
+#
+
 def get_values(*args):
     """Gets values from ticket entry GUI"""
     fields = ['ticket_number', 'company_name', 'job_site', 'date', 'employees',
@@ -125,12 +130,12 @@ def create_ticket():
     tk.Label(master_window, text='Job Site').grid(row=2)
     tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3)
     tk.Label(master_window, text='Employees (separate with comma)').grid(row=4)
-    tk.Label(master_window, text='Tare Weight').grid(row=5)
-    tk.Label(master_window, text='Gross Weight').grid(row=6)
+    tk.Label(master_window, text='Gross Weight').grid(row=5)
+    tk.Label(master_window, text='Tare Weight').grid(row=6)
     tk.Label(master_window, text='Net Weight').grid(row=7)
-    tk.Label(master_window, text='Hourly Rate').grid(row=8)
+    tk.Label(master_window, text='Hours Worked (if hourly project)').grid(row=8)
     tk.Label(master_window, text='Material Type').grid(row=9)
-    tk.Label(master_window, text='Rate').grid(row=10)
+    tk.Label(master_window, text='Rate for Material Type').grid(row=10)
 
     # create companies dropdown menu
     def company_show():
@@ -170,8 +175,8 @@ def create_ticket():
     company_jobsite.grid(row=2, column=1)
     date.grid(         row=3, column=1)
     employees.grid(    row=4, column=1)
-    tare_weight.grid(  row=5, column=1)
-    gross_weight.grid( row=6, column=1)
+    gross_weight.grid( row=5, column=1)
+    tare_weight.grid(  row=6, column=1)
     net_weight.grid(   row=7, column=1)
     hours_worked.grid( row=8, column=1)
     material_type.grid(row=9, column=1, sticky='w')

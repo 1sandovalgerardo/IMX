@@ -5,6 +5,10 @@ from tkinter import ttk, messagebox
 import IMX_Utils as utils
 from dateutil import parser
 
+# TODO: I need to implament a method of collecting the hours each employee worked
+#   This will then be used to calculate the amount of weight cut in a week to him.
+
+# TODO: Create employe_pay_rate table. Sets the pay per ton to the employee
 
 def scrap_split_logic(*args):
     selected_contractor, start_date, end_date = args
@@ -67,6 +71,7 @@ def run_report_gui():
                                                   end_date)).grid(row=4, column=3, pady=4)
 
     master_window.mainloop()
+
 
 def main():
     run_report_gui()
