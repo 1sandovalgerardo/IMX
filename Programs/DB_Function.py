@@ -9,12 +9,18 @@ from csv import writer
 from IPython import embed # embed()
 import Objects as db
 
+# TODO: what if no net or gross weight is provided on the ticket
+#       I need to account for no value being entered into gross and tare
+
+#
+
 def get_values(*args):
     """Gets values from ticket entry GUI"""
     fields = ['ticket_number', 'company_name', 'job_site', 'date', 'employees',
               'tare_weight', 'gross_weight', 'net_weight',
-              'material_type', 'rate']
+              'material_type', 'rate', 'attribute_date']
     data_entered = defaultdict()
+    # loops through fields and args to pair and create dictionary
     for variable, value in zip(fields, args):
         print(f'The item: {variable}.    The Value: {value.get() if value.get()!= "" else 0}')
 
@@ -120,17 +126,21 @@ def weight_warning_box():
 
 def create_ticket():
     master_window = tk.Tk()
-    tk.Label(master_window, text='Ticket Number').grid(row=0)
-    tk.Label(master_window, text='Company Name').grid(row=1)
-    tk.Label(master_window, text='Job Site').grid(row=2)
-    tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3)
-    tk.Label(master_window, text='Employees (separate with comma)').grid(row=4)
-    tk.Label(master_window, text='Tare Weight').grid(row=5)
-    tk.Label(master_window, text='Gross Weight').grid(row=6)
-    tk.Label(master_window, text='Net Weight').grid(row=7)
-    tk.Label(master_window, text='Hourly Rate').grid(row=8)
-    tk.Label(master_window, text='Material Type').grid(row=9)
-    tk.Label(master_window, text='Rate').grid(row=10)
+    master_window.title('IMX Ticket Entry')
+
+    tk.Label(master_window, text='Ticket Number\n').grid(row=0)
+    tk.Label(master_window, text='Company Name\n').grid(row=1)
+    tk.Label(master_window, text='Job Site\n').grid(row=2)
+    tk.Label(master_window, text='Date \n(yyyy-mm-dd)').grid(row=3)
+    tk.Label(master_window, text='Employees \n(separate with comma)').grid(row=4)
+    tk.Label(master_window, text='Gross Weight\n').grid(row=5)
+    tk.Label(master_window, text='Tare Weight\n').grid(row=6)
+    tk.Label(master_window, text='Net Weight\n').grid(row=7)
+    tk.Label(master_window, text='Hours Worked \n(if hourly project)').grid(row=8)
+    tk.Label(master_window, text='Material Type\n').grid(row=9)
+    tk.Label(master_window, text='Rate for Material Type\n').grid(row=10)
+
+    tk.Label(master_window, text='Week Cut').grid(row=3, column=2)
 
     # create companies dropdown menu
     def company_show():
@@ -158,20 +168,23 @@ def create_ticket():
     company_jobsite = ttk.Combobox(master_window, width=37)
     date = tk.Entry(master_window, width=37)
     employees = tk.Entry(master_window, width=37)
-    tare_weight = tk.Entry(master_window, width=37)
     gross_weight = tk.Entry(master_window, width=37)
+    tare_weight = tk.Entry(master_window, width=37)
     net_weight = tk.Entry(master_window, width=37)
     hours_worked = tk.Entry(master_window, width=37)
     material_type = tk.OptionMenu(master_window, selected_metal, *metal_options)
     rate = tk.Entry(master_window, width=37)
+
+    attribute_date = ttk.Entry(width=25)
+    attribute_date.grid(row=3, column=3)
 
     ticket_number.grid(row=0, column=1)
     company_name.grid( row=1, column=1, sticky='w')
     company_jobsite.grid(row=2, column=1)
     date.grid(         row=3, column=1)
     employees.grid(    row=4, column=1)
-    tare_weight.grid(  row=5, column=1)
-    gross_weight.grid( row=6, column=1)
+    gross_weight.grid( row=5, column=1)
+    tare_weight.grid(  row=6, column=1)
     net_weight.grid(   row=7, column=1)
     hours_worked.grid( row=8, column=1)
     material_type.grid(row=9, column=1, sticky='w')
@@ -193,7 +206,8 @@ def create_ticket():
                                          gross_weight,
                                          net_weight,
                                          selected_metal,
-                                         rate)).grid(row=11, column=1, sticky=tk.W, pady=4)
+                                         rate,
+                                         attribute_date)).grid(row=11, column=1, sticky=tk.W, pady=4)
 
     master_window.mainloop()
 
