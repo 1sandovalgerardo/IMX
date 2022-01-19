@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from dateutil import parser
 
 import pandas as pd
@@ -11,13 +12,21 @@ import IMX_Utils as utils
 def enter_time_logic(*args):
     company = args[0].get()
     jobsite = args[1].get()
-    contractor_id, first_name, last_name = args[2].get().split()
+    contractor = args[2].get()
+    contractor_id, first_name, last_name = contractor.split()
     date_worked = parser.parse(args[3].get()).date()
     hours_worked = args[4].get()
     data = [[contractor_id, first_name, last_name, date_worked, hours_worked, company, jobsite]]
     df = pd.DataFrame(data, columns=['contractor_id', 'first_name', 'last_name', 'date',
                                      'hours_worked', 'company', 'jobsite'])
     df.to_csv('../Data/Raw/Hours_Worked.csv', sep=',', header=False, index=False, mode='a')
+    submission_box(contractor)
+
+
+def submission_box(*args):
+    #message_window = tk.Tk()
+    messagebox.showinfo('IMX Hours Entered', f'Hours for {args[0]} entered.')
+    #message_window.loop()
 
 def run_time_entry():
     master_window = tk.Tk()

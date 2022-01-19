@@ -5,3 +5,8 @@ contractor_id,first_name,last_name,date,hours_worked,company, jobsite
 1001,Gerardo,Sandoval,2022-01-02,10,Big Inc,Big 1
 1002,Fred,Barker,2022-01-02,8,Big Inc,Big 1
 1002,Heather,Barker,2022-01-02,6,Big Inc,Big 1
+1001,Gerardo,Sandoval,2022-01-03,10,Big Inc,Big 2
+1001,Gerardo,Sandoval,2022-01-04,10,Big Inc,Big 2
+1001,Gerardo,Sandoval,2022-01-05,5,Scrap Inc,Scrap Site1
+1001,Gerardo,Sandoval,2022-01-05,10,Big Inc,Big 3
+1001,Gerardo,Sandoval,2022-01-06,10,Big Inc,Big 3
