@@ -309,7 +309,13 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
 
 def jobsite_man_hours(jobsite, start_date, end_date):
     # list of contractors at site
-    pass
+    contractors_ids = contractors_at_site(jobsite, start_date, end_date)
+    total_hours = []
+    for id in contractors_ids:
+        hours_worked = contractor_weekly_hours(id, jobsite, start_date, end_date)
+        total_hours.append(hours_worked)
+    total_hours = np.array(total_hours)
+    return total_hours.sum()
 
     # hours the contractor worked at the site
     # sum of all hours
