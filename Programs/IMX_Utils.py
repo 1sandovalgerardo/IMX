@@ -289,6 +289,30 @@ def contractor_weekly_hours(contractor, jobsite, start_date, end_date):
     hours_worked = np.array(hours_worked)
     return int(hours_worked.sum())
 
+def contractors_at_site(jobsite, start_date, end_date, **kwargs):
+    """Takes in a jobsite, start date, end date.  Returns a list of
+    contractor ids for those contractors that worked at the jobsite on specified dates."""
+    site_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
+    # fileter for jobsite
+    list_of_contractors = site_data.loc[site_data['jobsite']==jobsite]
+    # get list of desired dates
+    list_of_dates = dates_list(start_date, end_date)
+    contractor_ids = []
+    # look through list of dates to filter for contractors at the jobsite on that date
+    for date in list_of_dates:
+        ids = list_of_contractors.loc[list_of_contractors['date'] == str(date)]
+        contractor_ids = contractor_ids + list(ids['contractor_id'])
+    # return a set of ids
+    return set(contractor_ids)
+
+
+
+def jobsite_man_hours(jobsite, start_date, end_date):
+    # list of contractors at site
+    pass
+
+    # hours the contractor worked at the site
+    # sum of all hours
 
 
 

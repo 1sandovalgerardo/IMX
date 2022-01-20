@@ -12,6 +12,9 @@ import Objects as db
 # TODO: what if no net or gross weight is provided on the ticket
 #       I need to account for no value being entered into gross and tare
 
+# TODO: add strip to contractor name input.  Ensures removal of white space
+
+
 #
 
 def get_values(*args):
