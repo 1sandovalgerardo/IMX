@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import pandas as pd
+import numpy as np
 import datetime as dt
 from datetime import timedelta
 import logging
@@ -262,9 +263,31 @@ def enter_hrs_worked(**kwargs):
     date_worked = kwargs['date']
 
 
+#### functions for run_payroll() ####
+
+def contractor_daily_hours(contractor, a_date, jobsite):
+    """
+    Will return the number of hours a contractor worked on a specific date
+        at a specific job site.
+    Args:
+        contractor(int): contractor id
+        a_date(str): a string date in format YYYY-MM-DD
+        jobsite(str): jobsite to evaluate
+    """
+    hours_worked_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
+    contractor_data = hours_worked_data.loc[(hours_worked_data['date'] == a_date) & (hours_worked_data['contractor_id'] == contractor)]
+    contractor_data = contractor_data[contractor_data['jobsite'] == jobsite]
+    hours_worked_on_date = int(contractor_data['hours_worked'].sum())
+    return hours_worked_on_date
 
 
-
+def contractor_weekly_hours(contractor, jobsite, start_date, end_date):
+    dates_to_sum = dates_list(start_date, end_date)
+    hours_worked = []
+    for date in dates_to_sum:
+        hours_worked.append(contractor_daily_hours(contractor, str(date), jobsite))
+    hours_worked = np.array(hours_worked)
+    return int(hours_worked.sum())
 
 
 
