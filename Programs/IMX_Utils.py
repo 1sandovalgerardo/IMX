@@ -87,6 +87,23 @@ def days_tickets(company, desired_date):
     logging.debug('days_tickets() ended')
     return list_of_tickets
 
+
+def dates_list(start_date, end_date):
+    if start_date == end_date:
+        return start_date
+    if not isinstance(start_date, dt.date) or not isinstance(end_date, dt.date):
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+    number_of_days = int((end_date - start_date).days)
+    list_of_dates = []
+    for n in range(number_of_days+1):
+        date_to_add = start_date + timedelta(days=n)
+        list_of_dates.append(date_to_add)
+    return list_of_dates
+
+# TODO: I am working on the logic for dates_list.  Then I will continue building the function
+#   for run_payroll.py
+
 #### Functions for run_daily ####
 
 
@@ -131,7 +148,7 @@ def days_revenue(company, a_date):
 def get_contractors():
     """ Returns a list of companies found in Employees.csv"""
     ## I need to add logic to exclude contractors that are no longer active.
-    logging.debug('get_employees() called')
+    logging.debug('get_contractors() called')
     data = pd.read_csv('../Data/Raw/Employees.csv')
     data['employee_id'] = list(map(str, data['employee_id']))
     employee_var = data[['employee_id', 'first_name', 'last_name']]
@@ -262,8 +279,11 @@ def main():
     ## Test multiday_revenue
     #multiday_revenue('Total', '2022-1-1', '2022-1-5')
 
-    ## Test get_employees
-    get_employees()
+    ## Test get_contractors
+    get_contractors()
+
+    ## Test dates_list()
+    dates_list('1', '4')
 
 
 

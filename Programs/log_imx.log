@@ -1,2 +1,2 @@
 DEBUG: root: logging established
-DEBUG: root: get_employees() called
+DEBUG: root: get_contractors() called
