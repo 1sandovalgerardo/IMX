@@ -14,12 +14,14 @@ import Objects as db
 
 # TODO: add strip to contractor name input.  Ensures removal of white space
 
+# TODO: BUG : when entering ticket information, to file does not take into account
+#   if no hours worked is enterd.
 
 #
 
 def get_values(*args):
     """Gets values from ticket entry GUI"""
-    fields = ['ticket_number', 'company_name', 'job_site', 'date', 'employees',
+    fields = ['ticket_number', 'company_name', 'jobsite', 'date', 'employees',
               'tare_weight', 'gross_weight', 'net_weight',
               'material_type', 'rate', 'attribute_date']
     data_entered = defaultdict()
@@ -49,7 +51,7 @@ def next_ticket_id():
     return (new_internal_id)
 
 def clean_ticket_data(ticket_data):
-    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'job_site',
+    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'jobsite',
                      'date', 'employees', 'num_of_employees', 'tare_weight',
                      'gross_weight', 'net_weight', 'material_type', 'rate']
     clean_list = []

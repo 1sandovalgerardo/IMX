@@ -100,6 +100,7 @@ def dates_list(start_date, end_date):
     for n in range(number_of_days+1):
         date_to_add = start_date + timedelta(days=n)
         list_of_dates.append(date_to_add)
+    list_of_dates = [str(date) for date in list_of_dates]
     return list_of_dates
 
 # TODO: I am working on the logic for dates_list.  Then I will continue building the function
@@ -281,17 +282,34 @@ def contractor_daily_hours(contractor, a_date, jobsite):
     return hours_worked_on_date
 
 
-def contractor_weekly_hours(contractor, jobsite, start_date, end_date):
+def contractor_weekly_hours(contractor, jobsite, start_date, end_date, **kwargs):
     dates_to_sum = dates_list(start_date, end_date)
     hours_worked = []
-    for date in dates_to_sum:
-        hours_worked.append(contractor_daily_hours(contractor, str(date), jobsite))
-    hours_worked = np.array(hours_worked)
-    return int(hours_worked.sum())
+    if kwargs['return_dates'] == True:
+        weekly_hours_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
+        daily_hours = weekly_hours_data.groupby(['date', 'jobsite']).sum()['hours_worked']
+        print(daily_hours)
+    else:
+        for date in dates_to_sum:
+            hours_worked.append(contractor_daily_hours(contractor, str(date), jobsite))
+        hours_worked = np.array(hours_worked)
+        return int(hours_worked.sum())
 
 def contractors_at_site(jobsite, start_date, end_date, **kwargs):
     """Takes in a jobsite, start date, end date.  Returns a list of
-    contractor ids for those contractors that worked at the jobsite on specified dates."""
+    contractor ids for those contractors that worked at the jobsite on specified dates.
+
+    The kwargs, should be used to change what is returned.
+
+    Args:
+        jobsite(str): name of jobsite
+        start_date(str): first date
+        end_date(str): inclusive end date
+        return_contractor(keyword): will be used to return contractor info with hours
+
+    Returns:
+        contractor_ids(set): contractor ids found at the jobsite over the dates
+    """
     site_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
     # fileter for jobsite
     list_of_contractors = site_data.loc[site_data['jobsite']==jobsite]
@@ -304,7 +322,6 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
         contractor_ids = contractor_ids + list(ids['contractor_id'])
     # return a set of ids
     return set(contractor_ids)
-
 
 
 def jobsite_man_hours(jobsite, start_date, end_date):
@@ -320,6 +337,15 @@ def jobsite_man_hours(jobsite, start_date, end_date):
     # hours the contractor worked at the site
     # sum of all hours
 
+def tons_cut(jobsite, start_date, end_date, **kwargs):
+    data = pd.read_csv('../Data/Raw/Tickets.csv')
+    list_of_dates = dates_list(start_date, end_date)
+    site_data = data.loc[data['jobsite'] == jobsite]
+    date_data = site_data.loc[site_data['date'].isin(list_of_dates)]
+    total_weights = date_data.groupby(['date', 'material_type']).sum()['net_weight']
+    print(total_weights)
+    print(total_weights.unstack('date'))
+    return total_weights
 
 
 

@@ -35,7 +35,10 @@ def main():
     #utils.contractors_at_site('Big 3', '2022-01-03', '2022-01-07')
 
     # Test jobsite_man_hours()
-    utils.jobsite_man_hours('Big 3', '2022-01-03', '2022-01-07')
+    #utils.jobsite_man_hours('Big 3', '2022-01-03', '2022-01-07')
+
+    # Test tons_cut()
+    utils.tons_cut('Big 3', '2022-01-03', '2022-01-07')
 
 
 if __name__=="__main__":

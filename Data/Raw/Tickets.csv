@@ -1,4 +1,4 @@
-external_id,internal_id,company_name,job_site,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,hours_worked,material_type,rate
+external_id,internal_id,company_name,jobsite,date,employees,num_of_employees,tare_weight,gross_weight,net_weight,hours_worked,material_type,rate
 1001,100001,company1,name,2022-01-01,"Gerardo Sandoval, Fred Barker",2,100,200,100,0,metal,60
 1002,100002,company2,job2,2022-01-01,"Heather Barker, Amy Sandoval",2,1000,2000,1000,0,metal,60
 1003,100011,company1,name,2021-01-02,"Gerardo Sandoval, Fred Barker",2,100,200,100,0,metal,60
@@ -16,9 +16,14 @@ external_id,internal_id,company_name,job_site,date,employees,num_of_employees,ta
 1015,100013,Total,Site 2,2022-01-02,John Smith ,1,0,0,0,10,hourly,200
 1016,100014,Total,Site 2,2022-01-02,John Smith ,1,0,0,0,5,hourly,100
 1017,100015,Total,Site 2,2022-01-03,"Heather Barker, Amy Sandoval",2,1000,2000,1000,0,metal,60
-158576,100016,Cohen,Sardinia,2022-01-10,Gerardo Sandoval,1,51520,79220,27700,upsteel,50
-158575,100017,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,upsteel,50
-158575,100018,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,upsteel,50
-158575,100019,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,upsteel,50
-158575,100020,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,51580,77760 ,26180,upsteel,50
-a,100021,Scrap Inc,Scrap Site1,1, g s,1,1,1,1,upsteel,10
+158576,100016,Cohen,Sardinia,2022-01-10,Gerardo Sandoval,1,51520,79220,27700,0,upsteel,50
+158575,100017,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,0,upsteel,50
+158575,100018,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,0,upsteel,50
+158575,100019,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,77760,51580,26180,0,upsteel,50
+158575,100020,Cohen,Sardinia,2022-01-07,"Gerardo Sandoval,  Heather Barker",2,51580,77760,26180,0,upsteel,50
+1018,100021,Big Inc,Big 3,2022-01-03,Gerardo Sandoval,1,100,200,100,0,Other,50
+1019,100022,Big Inc,Big 3,2022-01-04,Gerardo Sandoval,1,100,200,100,0,upsteel,50
+1020,100023,Big Inc,Big 3,2022-01-05,Gerardo Sandoval,1,100,200,100,0,upsteel,50
+1021,100024,Big Inc,Big 3,2022-01-06,"Gerardo Sandoval, Fred Barker",2,100,200,100,0,upsteel,50
+1022,100025,Big Inc,Big 3,2022-01-07,"Gerardo Sandoval, Fred Barker, Heather Barker",3,100,200,100,0,upsteel,50
+1023,100026,Big Inc,Big 3,2022-01-07,"Gerardo Sandoval, Fred Barker, Heather Barker",3,100,200,100,0,upsteel,50
