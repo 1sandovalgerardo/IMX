@@ -7,6 +7,8 @@ from datetime import timedelta
 import logging
 from dateutil import parser
 
+# TODO: a function that takes in contractor id and returns the string form of
+#   id first_name last_name
 
 def create_log(debug):
     if debug:
@@ -357,7 +359,6 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
         print(file_path)
         grouped_data.to_csv(file_path)
     return grouped_data
-    # ad if kward and then return value.
 
 
 def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
