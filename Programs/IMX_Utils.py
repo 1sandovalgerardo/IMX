@@ -292,11 +292,14 @@ def contractor_weekly_hours(contractor, jobsite, start_date, end_date, **kwargs)
     kwargs:
         return_date(bool): if true returns pandas multi-index series that contains
             the date, job
+    Returns:
+        if no kwargs: returns int of total hours a contractor worked over the desired date range.
+        else: returns dataframe
     """
     dates_to_sum = dates_list(start_date, end_date)
     hours_worked = []
     # Used to return dates the hours where worked
-    if kwargs['return_dates'] == True:
+    if 'return_dates' in kwargs.keys():
         weekly_hours_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
         job_site_hours = weekly_hours_data[weekly_hours_data['jobsite'] == jobsite]
         daily_hours = job_site_hours[job_site_hours['contractor_id'] == contractor]
@@ -339,27 +342,87 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
     # return a set of ids
     return set(contractor_ids)
 
+def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
+    hours_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
+    list_of_dates = dates_list(start_date, end_date)
+    site_data = hours_data[hours_data['jobsite']==jobsite]
+    by_date = site_data[site_data['date'].isin(list_of_dates)]
+    grouped_data = by_date.groupby(['date', 'contractor_id',
+                                    'first_name', 'last_name']).sum()
+    grouped_data = grouped_data[['hours_worked']]
+    print(grouped_data)
+    if 'to_file' in kwargs.keys():
+        file_name = f'HoursWorked_{jobsite}_{start_date}_{end_date}.csv'
+        file_path = f'../Data/Reports_To_Process/{file_name}'
+        print(file_path)
+        grouped_data.to_csv(file_path)
+    return grouped_data
+    # ad if kward and then return value.
 
-def jobsite_man_hours(jobsite, start_date, end_date):
+
+def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
     # list of contractors at site
     contractors_ids = contractors_at_site(jobsite, start_date, end_date)
-    total_hours = []
-    for id in contractors_ids:
-        hours_worked = contractor_weekly_hours(id, jobsite, start_date, end_date)
-        total_hours.append(hours_worked)
-    total_hours = np.array(total_hours)
-    return total_hours.sum()
+    if 'return_dates' in kwargs.keys():
+        list_of_dates = dates_list(start_date, end_date)
+        weekly_hours_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
+        job_site_hours = weekly_hours_data[weekly_hours_data['jobsite'] == jobsite]
+        daily_hours = job_site_hours[job_site_hours['contractor_id'].isin(contractors_ids)]
+        daily_hours = daily_hours[daily_hours['date'].isin(list_of_dates)]
+        grouped_daily_hours = daily_hours.groupby('date').sum()['hours_worked']
+        return grouped_daily_hours
+    else:
+        total_hours = []
+        for id in contractors_ids:
+            hours_worked = contractor_weekly_hours(id, jobsite, start_date, end_date)
+            total_hours.append(hours_worked)
+        total_hours = np.array(total_hours)
+        return total_hours.sum()
 
     # hours the contractor worked at the site
     # sum of all hours
 
 def tons_cut(jobsite, start_date, end_date, **kwargs):
+    """Returns pandas series that contains how many tons where cut over the dates.
+    Grouped by type of material"""
     data = pd.read_csv('../Data/Raw/Tickets.csv')
     list_of_dates = dates_list(start_date, end_date)
     site_data = data.loc[data['jobsite'] == jobsite]
     date_data = site_data.loc[site_data['date'].isin(list_of_dates)]
-    total_weights = date_data.groupby(['date', 'material_type']).sum()['net_weight']
-    return total_weights
+    if 'return_dates' in kwargs.keys():
+        total_weights = date_data.groupby(['date', 'material_type']).sum()
+        return_frame = total_weights[['net_weight', 'hours_worked', 'rate']]
+        return return_frame
+    else:
+        total_weights = date_data.groupby(['date', 'material_type']).sum()['net_weight']
+        return total_weights
+
+
+def jobsite_production(jobsite, start_date, end_date, to_file=False):
+    """
+    Returns a data frame that contains key columns for determine the production at a jobsite
+    across a number of days.
+    :param jobsite: str
+    :param start_date: str
+    :param end_date: str
+    :param to_file: bool
+    :return: pandas dataframe containing date, material type, net weight, hours worked, rate,
+    man hours, per hours production
+    """
+    total_man_hours = jobsite_man_hours(jobsite, start_date, end_date, return_dates=True)
+    hours = total_man_hours.values
+    dates = total_man_hours.index
+    total_man_hours = pd.DataFrame({'date': dates, 'man_hours':hours})
+    total_tons_cut = tons_cut(jobsite, start_date, end_date, return_dates=True)
+    total_tons_cut = total_tons_cut.reset_index()
+    final_df = total_tons_cut.merge(total_man_hours)
+    final_df['per_hour_production'] = round(final_df.net_weight / final_df.man_hours, 3)
+    if to_file:
+        file_name = f'Production_{jobsite}_{start_date}_{end_date}.csv'
+        full_path = f'../Data/Reports_To_Process/{file_name}'
+        final_df.to_csv(full_path )
+    return final_df
+
 
 
 

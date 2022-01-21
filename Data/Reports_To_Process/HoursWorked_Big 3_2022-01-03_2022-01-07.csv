@@ -1,0 +1,9 @@
+date,contractor_id,first_name,last_name,hours_worked
+2022-01-03,1001,Gerardo,Sandoval,10
+2022-01-04,1001,Gerardo,Sandoval,10
+2022-01-05,1001,Gerardo,Sandoval,10
+2022-01-06,1001,Gerardo,Sandoval,10
+2022-01-06,1002,Fred,Barker,10
+2022-01-07,1001,Gerardo,Sandoval,10
+2022-01-07,1002,Fred,Barker,10
+2022-01-07,1003,Heather,Barker,10
