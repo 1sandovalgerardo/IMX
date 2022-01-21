@@ -351,13 +351,14 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
     by_date = site_data[site_data['date'].isin(list_of_dates)]
     grouped_data = by_date.groupby(['date', 'contractor_id',
                                     'first_name', 'last_name']).sum()
-    grouped_data = grouped_data[['hours_worked']]
-    print(grouped_data)
     if 'to_file' in kwargs.keys():
+        print('in to file')
+        print(grouped_data)
         file_name = f'HoursWorked_{jobsite}_{start_date}_{end_date}.csv'
         file_path = f'../Data/Reports_To_Process/{file_name}'
-        print(file_path)
-        grouped_data.to_csv(file_path)
+        # I do not use index=False here because the index contains the date, id, and names
+        grouped_data.to_csv(file_path, sep=',')
+    grouped_data = grouped_data[['hours_worked']]
     return grouped_data
 
 
@@ -421,10 +422,39 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     if to_file:
         file_name = f'Production_{jobsite}_{start_date}_{end_date}.csv'
         full_path = f'../Data/Reports_To_Process/{file_name}'
-        final_df.to_csv(full_path )
+        final_df.to_csv(full_path, index=False)
     return final_df
 
 
+#### Invoice Functions ####
+def generate_invoice(company, jobsite, start_date, end_date):
+    try:
+        list_of_date = dates_list(start_date, end_date)
+        ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
+        jobsite_data = ticket_data.loc[(ticket_data['company_name'] == company) & (ticket_data['jobsite']==jobsite)]
+        by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_date)]
+        invoice_df = by_date[['external_id', 'jobsite', 'date', 'tare_weight', 'gross_weight',
+                              'net_weight', 'material_type', 'rate']]
+        invoice_df['Total'] = invoice_df['rate'] * invoice_df['net_weight']
+        new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+                         'Net Weight', 'Material Type', 'Rate', 'Total']
+        file_name = f'Invoice_{company}_{jobsite}_{start_date}_{end_date}.csv'
+        file_path = f'../Data/Reports_To_Process/{file_name}'
+        invoice_df.columns = new_col_names
+        invoice_df.to_csv(file_path, index=False)
+        return True
+    except Exception as error:
+        print(error)
+        return False
+
+
+def mark_ticket_billed():
+    # Create a method of marking that a ticket was billed
+    pass
+
+def ticket_paid():
+    # anotate that an invoice was paid
+    pass
 
 
 def main():

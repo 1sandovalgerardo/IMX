@@ -6,10 +6,13 @@ from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
 import numpy as np
+import os, sys
 import IMX_Utils as utils
 from dateutil import parser
 
-# TODO: add popup window to confirm payroll ran
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 
 # TODO: continue on to invoice
 
@@ -19,16 +22,35 @@ def payroll_logic(*args):
     jobsite = args[0].get()
     start_date = args[1].get()
     end_date = args[2].get()
-    for arg in args:
-        print(arg.get())
     utils.jobsite_production(jobsite, start_date, end_date, to_file=True)
-    utils.jobsite_hours_worked(jobsite, start_date, end_date,
-                                  to_file=True)
+    utils.jobsite_hours_worked(jobsite, start_date, end_date, to_file=True)
+    payroll_completed()
 
+def payroll_completed():
+    message = 'Payroll Entered'
+    messagebox.showinfo(title='Payroll Entered',
+                        message=message,
+                        )
 
-def run_payroll_gui():
+def invoice_logic(*args):
+    company = args[0].get()
+    jobsite = args[1].get()
+    start_date = args[2].get()
+    end_date = args[3].get()
+    print(company, jobsite, start_date, end_date)
+    invoice_result = utils.generate_invoice(company, jobsite, start_date, end_date)
+    if not invoice_result:
+        print('there was an error')
+        messagebox.showerror(title='Invoice Status',
+                             message='Invoice Not Created')
+    if invoice_result:
+        messagebox.showinfo(title='Invoice Status',
+                            message='Invoice Created')
+    return None
+
+def run_command_center():
     master_window = tk.Tk()
-    master_window.title('IMX Payroll')
+    master_window.title('IMX Command Center')
 
     tk.Label(master_window, text=' ').grid(row=0)
     tk.Label(master_window, text='Select Company Name').grid(row=1, column=1, sticky='E')
@@ -70,10 +92,21 @@ def run_payroll_gui():
     ## Buttons on window
     company_jobsite_menu.bind('<Button-1>', callback)
     tk.Button(master_window, text='Close', command=master_window.quit).grid(row=4, column=1, sticky=tk.W, pady=4)
-    tk.Button(master_window, text='Run Payroll',
-              command = lambda: payroll_logic(company_jobsite_menu,
-                                              start_date,
-                                              end_date)).grid(row=4, column=3, pady=4)
+    payroll_button = tk.Button(master_window,
+                               text='Run Payroll',
+                               command = lambda: payroll_logic(company_jobsite_menu,
+                                                               start_date,
+                                                               end_date))
+    invoice_button = tk.Button(master_window, text='Run Invoice',
+                               command = lambda: invoice_logic(selected_company,
+                                                               company_jobsite_menu,
+                                                               start_date,
+                                                               end_date
+                                                               ))
+
+    payroll_button.grid(row=4, column=3, pady=4)
+    invoice_button.grid(row=4, column=4, pady=4)
+
 
 
     master_window.mainloop()
@@ -81,7 +114,9 @@ def run_payroll_gui():
 
 
 def main():
-    run_payroll_gui()
+    #run_command_center()
+    utils.jobsite_hours_worked('Big 3', '2022-01-03', '2022-01-07', to_file=True)
+
 
 
 

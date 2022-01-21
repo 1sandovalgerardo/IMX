@@ -17,7 +17,8 @@ import Objects as db
 # TODO: BUG : when entering ticket information, to file does not take into account
 #   if no hours worked is enterd.
 
-#
+# TODO: add method that allows na for tare and gross weights.  If NA entered, then
+#   default value is 0 but skips the weight check.
 
 def get_values(*args):
     """Gets values from ticket entry GUI"""
