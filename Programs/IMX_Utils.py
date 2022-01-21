@@ -283,12 +283,28 @@ def contractor_daily_hours(contractor, a_date, jobsite):
 
 
 def contractor_weekly_hours(contractor, jobsite, start_date, end_date, **kwargs):
+    """Calculates how many hours a contractor worked over the desired time period.
+    Args:
+        contractor(int): contractor_id to get information for
+        jobsite(str): job site to get the data for
+        start_date(str): initial day
+        end_date(str): las day to return, inclusive
+    kwargs:
+        return_date(bool): if true returns pandas multi-index series that contains
+            the date, job
+    """
     dates_to_sum = dates_list(start_date, end_date)
     hours_worked = []
+    # Used to return dates the hours where worked
     if kwargs['return_dates'] == True:
         weekly_hours_data = pd.read_csv('../Data/Raw/Hours_Worked.csv')
-        daily_hours = weekly_hours_data.groupby(['date', 'jobsite']).sum()['hours_worked']
-        print(daily_hours)
+        job_site_hours = weekly_hours_data[weekly_hours_data['jobsite'] == jobsite]
+        daily_hours = job_site_hours[job_site_hours['contractor_id'] == contractor]
+        daily_hours = daily_hours[daily_hours['date'].isin(dates_to_sum)]
+        return_data = daily_hours[['contractor_id', 'date', 'jobsite',
+                                   'first_name', 'last_name',
+                                   'hours_worked']]
+        return return_data
     else:
         for date in dates_to_sum:
             hours_worked.append(contractor_daily_hours(contractor, str(date), jobsite))
@@ -343,8 +359,6 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
     site_data = data.loc[data['jobsite'] == jobsite]
     date_data = site_data.loc[site_data['date'].isin(list_of_dates)]
     total_weights = date_data.groupby(['date', 'material_type']).sum()['net_weight']
-    print(total_weights)
-    print(total_weights.unstack('date'))
     return total_weights
 
 

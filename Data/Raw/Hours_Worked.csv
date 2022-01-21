@@ -9,7 +9,6 @@ contractor_id,first_name,last_name,date,hours_worked,company,jobsite
 1001,Gerardo,Sandoval,2022-01-04,10,Big Inc,Big 2
 1001,Gerardo,Sandoval,2022-01-05,10,Big Inc,Big 2
 1001,Gerardo,Sandoval,2022-01-05,10,total,Site 1
-1001,Gerardo,Sandoval,2022-01-03,5,Big Inc,Big 3
 1001,Gerardo,Sandoval,2022-01-03,10,Big Inc,Big 3
 1001,Gerardo,Sandoval,2022-01-04,10,Big Inc,Big 3
 1001,Gerardo,Sandoval,2022-01-05,10,Big Inc,Big 3

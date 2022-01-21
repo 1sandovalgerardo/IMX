@@ -30,6 +30,9 @@ def main():
     # Test contractor_weekly_hours
     #hours_in_week = utils.contractor_weekly_hours(1001, 'Big 3', '2022-01-03', '2022-01-07')
     #print(hours_in_week)
+    a = hours_in_week = utils.contractor_weekly_hours(1001, 'Big 3', '2022-01-03', '2022-01-05',
+                                                  return_dates=True)
+    print(a)
 
     # Test contractors_at_site
     #utils.contractors_at_site('Big 3', '2022-01-03', '2022-01-07')
@@ -38,7 +41,10 @@ def main():
     #utils.jobsite_man_hours('Big 3', '2022-01-03', '2022-01-07')
 
     # Test tons_cut()
-    utils.tons_cut('Big 3', '2022-01-03', '2022-01-07')
+    #a = utils.tons_cut('Big 3', '2022-01-03', '2022-01-07')
+    #print(type(a))
+    #print(a)
+
 
 
 if __name__=="__main__":
