@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""Use to create contractor's paysheet and invoice to company by jobsite.
+Usage:
+    ./run_command_center.py
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox

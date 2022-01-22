@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""Use to enter a contractors hours worked at a specific jobsite.
+Usage:
+    ./run_timesheet_entry.py
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox

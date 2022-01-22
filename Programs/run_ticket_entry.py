@@ -13,6 +13,12 @@ import IMX_Utils as utils
 
 
 def perform_checks(*args, **kwargs):
+    '''
+    Used to check values that are entered and avoid entering incorrect information or
+    information that will cause errors elsewhere. If any errors are found, this will trigger
+    pop-up windows with the appropriate warning.
+    :return: Bool
+    '''
     ticket_number = args[0].get()
     gross_weight = float(args[1].get()) if len(args[1].get())>0 else 0
     tare_weight = float(args[2].get()) if len(args[2].get())>0 else 0
@@ -40,9 +46,12 @@ def perform_checks(*args, **kwargs):
     return True
 
 def enter_ticket(*args):
+    """Primary Logic of GUI"""
     ticket_data = tu.get_ticket_values(*args)
     data_to_write = tu.clean_ticket(ticket_data)
     tu.save_ticket_data(data_to_write)
+    messagebox.showinfo('Ticket Entered',
+                        message='Ticket Entered Successfully')
     return None
 
 

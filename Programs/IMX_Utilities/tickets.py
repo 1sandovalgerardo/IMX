@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""Contains functions needed to properly run ticket entry program.
+Usage:
+    import IMX_Utilities.tickets as tu
+"""
+
 import pandas as pd
 import numpy as np
 import os, sys
