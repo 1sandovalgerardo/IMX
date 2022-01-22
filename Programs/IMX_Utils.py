@@ -62,7 +62,7 @@ def ticket_revenue(ticket_number):
     ticket_number = int(ticket_number)
     ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
     # filter data for specific ticket number
-    ticket_data = ticket_data.loc[ticket_data['external_id']==ticket_number]
+    ticket_data = ticket_data.loc[ticket_data['ticket_number']==ticket_number]
     type_of_material = str(ticket_data['material_type'])
     material_weight = float(ticket_data['net_weight'])
     rate = float(ticket_data['rate'])
@@ -88,7 +88,7 @@ def days_tickets(company, desired_date):
         desired_date = list(map(int, desired_date.split(sep='-')))
         desired_date = dt.date(desired_date[0], desired_date[1], desired_date[2])
     return_data = data.loc[(data['date'] == desired_date) & (data['company_name']==company)]
-    list_of_tickets = list(return_data['external_id'])
+    list_of_tickets = list(return_data['ticket_number'])
     logging.debug('days_tickets() ended')
     return list_of_tickets
 
@@ -169,7 +169,7 @@ def to_file(**kwargs):
     file_name = f'{start_date}_{end_date}_{"_".join(contractor_name)}.csv'
     # the if to be able to use the function for other items
     if kwargs['contractor_tickets']:
-        columns = ['external_id', 'date', 'contractor_name','material_type',
+        columns = ['ticket_number', 'date', 'contractor_name','material_type',
                    'qty', 'num_of_employees', 'qty_to_contractor' ]
         file_to_save = pd.DataFrame(kwargs['contractor_tickets'], columns=columns)
         file_name = f'../Data/Reports_To_Process/{file_name}'
@@ -202,7 +202,7 @@ def tickets_contractors_on(first_name, last_name):
     last_name = last_name.title()
     contractors_tickets = []
     for index, row in data.iterrows():
-        ticket_id = row['external_id']
+        ticket_id = row['ticket_number']
         contractors_on_ticket = row['employees'].split(',')
         for name in contractors_on_ticket:
             if first_name.lower() in name.lower() and last_name.lower() in name.lower():
@@ -255,7 +255,7 @@ def create_ticket_employee_table():
             else:
                 first_name, middle_name, last_name = contractor
             table_rows.append([ticket_num, internal_id, first_name, middle_name, last_name]) 
-    table_columns = ['external_id', 'internal_id', 'first_name','middle_name', 'last_name']
+    table_columns = ['ticket_number', 'internal_id', 'first_name','middle_name', 'last_name']
     df_to_write = pd.DataFrame(table_rows, columns=table_columns)
     df_to_write.to_csv('../Data/Raw/Ticket_Contractor_Table.csv', index=False, sep=',')
 
@@ -435,7 +435,7 @@ def generate_invoice(company, jobsite, start_date, end_date):
         ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
         jobsite_data = ticket_data.loc[(ticket_data['company_name'] == company) & (ticket_data['jobsite']==jobsite)]
         by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_date)]
-        invoice_df = by_date[['external_id', 'jobsite', 'date', 'tare_weight', 'gross_weight',
+        invoice_df = by_date[['ticket_number', 'jobsite', 'date', 'tare_weight', 'gross_weight',
                               'net_weight', 'material_type', 'rate']]
         invoice_df['Total'] = invoice_df['rate'] * invoice_df['net_weight']
         new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',

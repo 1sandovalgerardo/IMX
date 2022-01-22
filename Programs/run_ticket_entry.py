@@ -1,232 +1,171 @@
 #!/usr/bin/env python
-
+import logging
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
 from csv import writer
-import IMX_Utilities.ticket_entry_support as ut
-#from IPython import embed # embed()
-#import Objects as db
+import IMX_Utilities.tickets as tu
+import IMX_Utils as utils
+
+# TODO: add strip to contractor name input.  Ensures removal of white space
 
 
-def get_values(*args):
-    """Gets values from ticket entry GUI"""
-    fields = ['ticket_number', 'company_name', 'jobsite', 'date', 'employees',
-              'tare_weight', 'gross_weight', 'net_weight',
-              'material_type', 'rate', 'attribute_date']
-    data_entered = defaultdict()
-    # loops through fields and args to pair and create dictionary
-    for variable, value in zip(fields, args):
-        #print(f'The item: {variable}.    The Value: {value.get() if value.get()!= "" else 0}')
-        data_entered[variable] = value.get() if value.get() != '' else 0
-    #print('values entered to dictionary')
-    data_entered['internal_id'] = next_ticket_id()
-    return data_entered
-
-def enter_ticket_logic(*args, **kwargs):
-    data_to_enter = get_values(*args)
-    perform_checks(data_to_enter)
-    save_ticket_data(data_to_enter)
-
-def save_ticket_data(ticket_data):
-    data_to_save = clean_ticket_data(ticket_data)
-    with open('../Data/Raw/Tickets.csv', 'a') as ticket_file:
-        writer_object = writer(ticket_file)
-        writer_object.writerow(data_to_save)
-
-#### Functions for ticket entry ####
-
-def next_ticket_id():
-    latest_internal_id = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])[-1]
-    new_internal_id = int(latest_internal_id) + 1
-    return (new_internal_id)
-
-# Todo: add the week cut variable to this function
-def clean_ticket_data(ticket_data):
-    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'jobsite',
-                     'date', 'employees', 'num_of_employees', 'tare_weight',
-                     'gross_weight', 'net_weight', 'material_type', 'rate']
-    clean_list = []
-    for key in order_of_keys:
-        if key == 'ticket_number':
-            clean_list.append(ticket_data['ticket_number'])
-        elif key == 'num_of_employees':
-            employees = ticket_data['employees'].split(',')
-            clean_list.append(len(employees))
-        else:
-            clean_list.append(ticket_data[key])
-    #print(clean_list)
-    return clean_list
-
-
-# This can be replaced with imx_utils.get_companies()
-def get_companies():
-    data = pd.read_csv('../Data/Raw/Companies.csv')
-    list_of_companies = list(data['company_name'])
-    #print(list_of_companies)
-    return list_of_companies
-
-def get_jobsite_details():
-    data = pd.read_csv('../Data/Raw/Jobsite.csv')
-    jobsite_data = data
-    list_jobsite_ids = jobsite_data.loc[jobsite_data['company_name']==company_name]
-    list_jobsite_ids = list_jobsite_ids[['company_name', 'jobsite_name', 'jobsite_id']]
-    jobsite_names_ids = list_jobsite_ids[['jobsite_name', 'jobsite_id']]
-    return data
-
-def get_paired_company_jobsite():
-    local_data = pd.read_csv('../Data/Raw/Jobsite.csv')
-    companies = local_data['company_name'].unique()
-    jobsites = []
-    for value in companies:
-        jobsites_at_company = local_data.loc[local_data['company_name']==value]['jobsite_name']
-        jobsites.append(jobsites_at_company.to_list())
-    return (companies.tolist(), jobsites)
-
-#### Safety Checks ####
-def perform_checks(data_dict):
-    print('in perform_checks')
-    check_weights(data_dict)
-    check_internal_id(data_dict)
-    print(data_dict)
-    dup_ticket = ut.duplicate_ticket(data_dict['ticket_number'])
-    if dup_ticket:
-        messagebox.showwarning(title='Duplicate Ticket',
-                               message='This is a duplicate ticket.')
-
-def check_internal_id(data_dict):
-    '''Used to avoid duplicate internal id for ticket'''
-    internal_id = data_dict['internal_id']
-    # internal_id = 100003
-    all_internal_ids = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])
-    # print(internal_id)
-    # print(all_internal_ids)
-    if internal_id in all_internal_ids:
-        # These next two lines prevent a background window from appearing
-        #window = tk.Tk(how to set up a databse for small business)
-        #window.wm_withdraw()
-        message = 'You are creating a duplicate internal id'
-        messagebox.showwarning(title='Internal ID',
+def perform_checks(*args, **kwargs):
+    ticket_number = args[0].get()
+    gross_weight = float(args[1].get()) if len(args[1].get())>0 else 0
+    tare_weight = float(args[2].get()) if len(args[2].get())>0 else 0
+    net_weight = float(args[3].get()) if len(args[3].get())>0 else 0
+    logging.debug(f'Gross: {gross_weight}\t Tare: {tare_weight}\t Net: {net_weight}')
+    final_check = 0
+    if tu.duplicate_ticket(ticket_number):
+        message = 'This is a duplicate ticket.'
+        messagebox.showwarning(title='DUPLICATE TICKET',
                                message=message)
+        if 'stop_entry' in kwargs.keys():
+            final_check += 1
+    if 0 not in [gross_weight, tare_weight]:
+        if net_weight != (gross_weight - tare_weight):
+            print('weights are wrong')
+            message2 = 'The weights are wrong'
+            messagebox.showwarning(title='WRONG WEIGHTS',
+                                   message=message2)
+            if 'stop_entry' in kwargs.keys():
+                final_check += 1
+    # Run a check to compare rate entered vs what is in the rate key.
+    # This is to be used as a final check after clicking on submit data.
+    if final_check != 0:
+        return False
+    return True
 
-def check_weights(data_dict):
-    tare_weight = data_dict['tare_weight']
-    gross_weight = data_dict['gross_weight']
-    print(f'Gross Weight: {gross_weight}, Tare Weight: {tare_weight}')
-    actual_material_weight = float(gross_weight) - float(tare_weight)
-    report_net_weight = float(data_dict['net_weight'])
-    if actual_material_weight != report_net_weight:
-        weight_warning_box()
+def enter_ticket(*args):
+    ticket_data = tu.get_ticket_values(*args)
+    data_to_write = tu.clean_ticket(ticket_data)
+    tu.save_ticket_data(data_to_write)
+    return None
 
-def weight_warning_box():
-    print('in weight_warning_box')
-    message = 'Weights reported incorrectly.'
-    messagebox.showwarning(title='Weight are wrong',
-                           message=message)
-    #warning_window.mainloop()
 
-#### Program Logic ####
-
-def create_ticket():
+def ticket_entry_window():
     master_window = tk.Tk()
     master_window.title('IMX Ticket Entry')
 
-    tk.Label(master_window, text='Ticket Number\n').grid(row=0)
-    tk.Label(master_window, text='Company Name\n').grid(row=1)
-    tk.Label(master_window, text='Job Site\n').grid(row=2)
-    tk.Label(master_window, text='Date \n(yyyy-mm-dd)').grid(row=3)
-    tk.Label(master_window, text='Employees \n(separate with comma)').grid(row=4)
-    tk.Label(master_window, text='Gross Weight\n').grid(row=5)
-    tk.Label(master_window, text='Tare Weight\n').grid(row=6)
-    tk.Label(master_window, text='Net Weight\n').grid(row=7)
-    tk.Label(master_window, text='Hours Worked \n(if hourly project)').grid(row=8)
-    tk.Label(master_window, text='Material Type\n').grid(row=9)
-    tk.Label(master_window, text='Rate for Material Type\n').grid(row=10)
+    tk.Label(master_window, text='Ticket Number').grid(row=0, sticky='se')
+    tk.Label(master_window, text='Company Name').grid(row=1, sticky='se')
+    tk.Label(master_window, text='Job Site').grid(row=2, sticky='se')
+    tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3, sticky='se')
+    tk.Label(master_window, text='Week Cut').grid(row=3, column=2, sticky='se')
+    tk.Label(master_window, text='Employees (separate with comma)').grid(row=4, sticky='se')
+    tk.Label(master_window, text='Gross Weight').grid(row=5, sticky='se')
+    tk.Label(master_window, text='Tare Weight').grid(row=6, sticky='se')
+    tk.Label(master_window, text='Net Weight').grid(row=7, sticky='se')
+    tk.Label(master_window, text='Hours Worked (if hourly project)').grid(row=8, sticky='se')
+    tk.Label(master_window, text='Material Type').grid(row=9, sticky='se')
+    tk.Label(master_window, text='Rate (Material or Hourly)').grid(row=10, sticky='se')
 
-    tk.Label(master_window, text='Week Cut').grid(row=3, column=2)
-
-    # create companies dropdown menu
+    # Creates companies dropdown menu
     def company_show():
         tk.label.config(text=clicked.get())
-    company_options = get_companies()
+    company_options = utils.get_companies()
     selected_company = tk.StringVar()
     selected_company.set('Select Company')
 
-    # combobox for jobsites
-    company_names, jobsites = get_paired_company_jobsite()
+    # Combobox for job sites
+    # two list with a company name, job site correctly indexed
+    company_names, job_sites = utils.get_paired_company_jobsite()
     def callback(eventObject):
         abc = eventObject.widget.get()
-        # for OptionMenu version
+        # Gets the company that was choosen in the options menu
         company_selected = selected_company.get()
         index = company_names.index(company_selected)
-        company_jobsite.config(values=jobsites[index])
+        company_jobsite.config(values=job_sites[index])
 
-    # dropdown for material types
-    metal_options = ['rebar', 'upsteel', 'wire', 'hourly']
+    # Dropdown for material types
+    metal_options = ['1_foot_heavy_torching', '2_foot', '2_foot_rail_road_crops',
+                     '3_foot', '3_foot_heavy_torch', '3_foot_nitro',
+                     '3_foot_rail_crops', '4_foot_cable', '4_foot_gt',
+                     '4_foot_heavy_torch', '4_foot_rail_crops', '5_foo_and_less',
+                     '5_foot', '5_foot_heavy_torching', '5_foot_manganese',
+                     '5_foot_ship_plate', '5_foot_x_2_foot', 'cast', 'coil_torching',
+                     'electric_motor', 'equiptment_plate', 'ferrous_skulls', 'heavy_melt',
+                     'mill_rolls', 'rail_car', 'rail_car', 'railroad_railcar', 'rebar_wire_cable',
+                     'rod_coils', 'wheel_axel',
+                     'hourly', 'overtime']
     selected_metal = tk.StringVar()
-    selected_metal.set('Select Metal')
+    selected_metal.set('Select Material / Product')
 
-    ticket_number = tk.Entry(master_window, width=37)
-    company_name = tk.OptionMenu(master_window, selected_company, *company_options)
-    company_jobsite = ttk.Combobox(master_window, width=37)
-    date = tk.Entry(master_window, width=37)
-    employees = tk.Entry(master_window, width=37)
-    gross_weight = tk.Entry(master_window, width=37)
-    tare_weight = tk.Entry(master_window, width=37)
-    net_weight = tk.Entry(master_window, width=37)
-    hours_worked = tk.Entry(master_window, width=37)
-    material_type = tk.OptionMenu(master_window, selected_metal, *metal_options)
-    rate = tk.Entry(master_window, width=37)
+    # Entry windows and options menus
 
-    attribute_date = ttk.Entry(width=25)
-    attribute_date.grid(row=3, column=3)
+    ticket_number     =  tk.Entry(master_window, width=20)
+    company_name      =  tk.OptionMenu(master_window, selected_company, *company_options)
+    company_jobsite   =  ttk.Combobox(master_window, width=20)
+    date              =  tk.Entry(master_window, width=20)
+    attribute_date    =  ttk.Entry(width=20)
+    employees         =  tk.Entry(master_window, width=37)
+    gross_weight      =  tk.Entry(master_window, width=20)
+    tare_weight       =  tk.Entry(master_window, width=20)
+    net_weight        =  tk.Entry(master_window, width=20)
+    hours_worked      =  tk.Entry(master_window, width=20)
+    material_type     =  tk.OptionMenu(master_window, selected_metal, *metal_options)
+    rate              =  tk.Entry(master_window, width=20)
 
-    ticket_number.grid(row=0, column=1)
-    company_name.grid( row=1, column=1, sticky='w')
-    company_jobsite.grid(row=2, column=1)
-    date.grid(         row=3, column=1)
-    employees.grid(    row=4, column=1)
-    gross_weight.grid( row=5, column=1)
-    tare_weight.grid(  row=6, column=1)
-    net_weight.grid(   row=7, column=1)
-    hours_worked.grid( row=8, column=1)
-    material_type.grid(row=9, column=1, sticky='w')
-    rate.grid(         row=10, column=1)
+    ticket_number.grid( row=0,  column=1, sticky='w')
+    company_name.grid(  row=1,  column=1, sticky='w')
+    company_jobsite.grid(row=2, column=1, sticky='w')
+    date.grid(          row=3,  column=1, sticky='w')
+    attribute_date.grid(row=3,  column=3, sticky='w')
+    employees.grid(     row=4,  column=1, sticky='w')
+    gross_weight.grid(  row=5,  column=1, sticky='w')
+    tare_weight.grid(   row=6,  column=1, sticky='w')
+    net_weight.grid(    row=7,  column=1, sticky='w')
+    hours_worked.grid(  row=8,  column=1, sticky='w')
+    material_type.grid( row=9,  column=1, sticky='w')
+    rate.grid(          row=10, column=1, sticky='w')
 
+    # bind combobox with callback
+    # button 1 refers to left click of mouse
+    # 2nd arg is the function that is triggered.
     company_jobsite.bind('<Button-1>', callback)
 
-    tk.Button(master_window,
-              text='Quit',
-              command=master_window.quit).grid(row=11, column=0, sticky=tk.W, pady=4)
-    tk.Button(master_window,
+    # BUTTONS
+    close_button = tk.Button(master_window,
+              text='Close',
+              command=master_window.quit)
+    run_checks_button = tk.Button(master_window,
+              text='Run Checks',
+              command=lambda: perform_checks(ticket_number,
+                                            gross_weight,
+                                            tare_weight,
+                                            net_weight))
+    run_logic_button = tk.Button(master_window,
               text='Enter Data',
-              command=lambda: enter_ticket_logic(ticket_number,
-                                         selected_company,
-                                         company_jobsite,
-                                         date,
-                                         employees,
-                                         tare_weight,
-                                         gross_weight,
-                                         net_weight,
-                                         selected_metal,
-                                         rate,
-                                         attribute_date)).grid(row=11, column=1, sticky=tk.W, pady=4)
+              command=lambda: enter_ticket(ticket_number,
+                                             selected_company,
+                                             company_jobsite,
+                                             date,
+                                             attribute_date,
+                                             employees,
+                                             gross_weight,
+                                             tare_weight,
+                                             net_weight,
+                                             hours_worked,
+                                             selected_metal,
+                                             rate))
+    # SET BUTTONS
+    close_button.grid(row=11, column=0, pady=4)
+    run_checks_button.grid(row=11, column=1, pady=4)
+    run_logic_button.grid(row=11, column=2, pady=4)
 
     master_window.mainloop()
 
 
-def main():
-    create_ticket()
-    #next_ticket_id()
-    #check_internal_id()
 
+
+def main():
+    ticket_entry_window()
+    #enter_ticket(1030, 'Big Inc', 'Big 3', '2022-01-10', '2022-01-10',
+    #             'Gerardo Sandoval, John Bain', '200', '100', '100', 'metal_1',
+    #             '50')
 
 if __name__=='__main__':
     main()
-
-
-
-
-
