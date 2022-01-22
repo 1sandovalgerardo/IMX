@@ -10,7 +10,7 @@ import os, sys
 import IMX_Utils as utils
 from dateutil import parser
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 
@@ -114,8 +114,8 @@ def run_command_center():
 
 
 def main():
-    #run_command_center()
-    utils.jobsite_hours_worked('Big 3', '2022-01-03', '2022-01-07', to_file=True)
+    run_command_center()
+    #utils.jobsite_hours_worked('Big 3', '2022-01-03', '2022-01-07', to_file=True)
 
 
 
