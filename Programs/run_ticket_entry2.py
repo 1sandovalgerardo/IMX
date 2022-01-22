@@ -27,7 +27,24 @@ def enter_ticket_logic(*args):
     return None
 
 def perform_checks(*args):
-    entered_values = tu.get_ticket_values(*args)
+    ticket_number = args[0].get()
+    gross_weight = float(args[1].get())
+    tare_weight = float(args[2].get())
+    net_weight = float(args[3].get())
+    if tu.duplicate_ticket(ticket_number):
+        message = 'This is a duplicate ticket.'
+        messagebox.showwarning(title='DUPLICATE TICKET',
+                               message=message)
+    if 0 not in [gross_weight, tare_weight]:
+        if net_weight != (gross_weight - tare_weight):
+            print('weights are wrong')
+            message2 = 'The weights are wrong'
+            messagebox.showwarning(title='WRONG WEIGHTS',
+                                   message=message2)
+    return None
+
+
+    # external_ticket, weights,
     #### I am rebuilding the ticket entry method.
     #### Purpose is to organize the code.
     #### Next I need to: create check_weight, checkduped ticket,
@@ -120,16 +137,9 @@ def ticket_entry_window():
     run_checks_button = tk.Button(master_window,
               text='Run Checks',
               command=lambda: perform_checks(ticket_number,
-                                               selected_company,
-                                               company_jobsite,
-                                               date,
-                                               attribute_date,
-                                               employees,
-                                               tare_weight,
-                                               gross_weight,
-                                               net_weight,
-                                               selected_metal,
-                                               rate))
+                                            gross_weight,
+                                            tare_weight,
+                                            net_weight))
     run_logic_button = tk.Button(master_window,
               text='Enter Data',
               command=lambda: enter_ticket_logic(ticket_number,

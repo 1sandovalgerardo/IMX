@@ -18,7 +18,6 @@ def get_ticket_values(*ticket_data):
     return data_dict
 
 
-
 def duplicate_ticket(ticket_number):
     ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
     ticket_exists = ticket_number in list(ticket_data['external_id'])
