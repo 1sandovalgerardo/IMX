@@ -392,13 +392,13 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
     data = pd.read_csv('../Data/Raw/Tickets.csv')
     list_of_dates = dates_list(start_date, end_date)
     site_data = data.loc[data['jobsite'] == jobsite]
-    date_data = site_data.loc[site_data['date'].isin(list_of_dates)]
+    date_data = site_data.loc[site_data['attribute_date'].isin(list_of_dates)]
     if 'return_dates' in kwargs.keys():
-        total_weights = date_data.groupby(['date', 'material_type']).sum()
+        total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()
         return_frame = total_weights[['net_weight', 'hours_worked', 'rate']]
         return return_frame
     else:
-        total_weights = date_data.groupby(['date', 'material_type']).sum()['net_weight']
+        total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()['net_weight']
         return total_weights
 
 

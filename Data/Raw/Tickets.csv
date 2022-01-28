@@ -27,5 +27,5 @@ external_id,internal_id,company_name,jobsite,date,attribute_date,employees,num_o
 1021,100024,Big Inc,Big 3,2022-01-06,2022-01-06,"Gerardo Sandoval, Fred Barker",2,100,200,100,0,upsteel,50
 1022,100025,Big Inc,Big 3,2022-01-07,2022-01-07,"Gerardo Sandoval, Fred Barker, Heather Barker",3,100,200,100,0,upsteel,50
 1023,100026,Big Inc,Big 3,2022-01-07,2022-01-07,"Gerardo Sandoval, Fred Barker, Heather Barker",3,100,200,100,0,upsteel,50
-1024,100027,Big Inc,Big 2,2022-01-15,2022-01-15,gerardo sandoval,1,0,100,100,upsteel,50,
-1025,100028,Big Inc,Big 2,2022-01-01,2022-01-01,gerardo sandoval,1,0,100,100,upsteel,50,
+1024,100027,Big Inc,Big 2,2022-01-15,2022-01-15,gerardo sandoval,1,0,100,100,0,upsteel,50
+1025,100028,Big Inc,Big 2,2022-01-01,2022-01-01,gerardo sandoval,1,0,100,100,0,upsteel,50

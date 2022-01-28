@@ -33,6 +33,7 @@ def submission_box(*args):
     messagebox.showinfo('IMX Hours Entered', f'Hours for {args[0]} entered.')
     #message_window.loop()
 
+
 def run_time_entry():
     master_window = tk.Tk()
 
