@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""Use to enter a contractors hours worked at a specific jobsite.
+Usage:
+    ./run_timesheet_entry.py
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -27,6 +32,7 @@ def submission_box(*args):
     #message_window = tk.Tk()
     messagebox.showinfo('IMX Hours Entered', f'Hours for {args[0]} entered.')
     #message_window.loop()
+
 
 def run_time_entry():
     master_window = tk.Tk()

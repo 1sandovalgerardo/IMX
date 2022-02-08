@@ -6,29 +6,29 @@ from tkinter import messagebox
 from collections import defaultdict
 import pandas as pd
 from csv import writer
-from IPython import embed # embed()
-import Objects as db
+import IMX_Utilities.ticket_entry_support as ut
+#from IPython import embed # embed()
+#import Objects as db
 
-# TODO: what if no net or gross weight is provided on the ticket
-#       I need to account for no value being entered into gross and tare
-
-#
 
 def get_values(*args):
     """Gets values from ticket entry GUI"""
-    fields = ['ticket_number', 'company_name', 'job_site', 'date', 'employees',
+    fields = ['ticket_number', 'company_name', 'jobsite', 'date', 'employees',
               'tare_weight', 'gross_weight', 'net_weight',
               'material_type', 'rate', 'attribute_date']
     data_entered = defaultdict()
     # loops through fields and args to pair and create dictionary
     for variable, value in zip(fields, args):
-        print(f'The item: {variable}.    The Value: {value.get() if value.get()!= "" else 0}')
-
+        #print(f'The item: {variable}.    The Value: {value.get() if value.get()!= "" else 0}')
         data_entered[variable] = value.get() if value.get() != '' else 0
-    print('values entered to dictionary')
+    #print('values entered to dictionary')
     data_entered['internal_id'] = next_ticket_id()
-    perform_checks(data_entered)
-    save_ticket_data(data_entered)
+    return data_entered
+
+def enter_ticket_logic(*args, **kwargs):
+    data_to_enter = get_values(*args)
+    perform_checks(data_to_enter)
+    save_ticket_data(data_to_enter)
 
 def save_ticket_data(ticket_data):
     data_to_save = clean_ticket_data(ticket_data)
@@ -41,12 +41,11 @@ def save_ticket_data(ticket_data):
 def next_ticket_id():
     latest_internal_id = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])[-1]
     new_internal_id = int(latest_internal_id) + 1
-    print(latest_internal_id)
-    print(new_internal_id)
     return (new_internal_id)
 
+# Todo: add the week cut variable to this function
 def clean_ticket_data(ticket_data):
-    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'job_site',
+    order_of_keys = ['ticket_number', 'internal_id', 'company_name', 'jobsite',
                      'date', 'employees', 'num_of_employees', 'tare_weight',
                      'gross_weight', 'net_weight', 'material_type', 'rate']
     clean_list = []
@@ -91,8 +90,14 @@ def perform_checks(data_dict):
     print('in perform_checks')
     check_weights(data_dict)
     check_internal_id(data_dict)
+    print(data_dict)
+    dup_ticket = ut.duplicate_ticket(data_dict['ticket_number'])
+    if dup_ticket:
+        messagebox.showwarning(title='Duplicate Ticket',
+                               message='This is a duplicate ticket.')
 
 def check_internal_id(data_dict):
+    '''Used to avoid duplicate internal id for ticket'''
     internal_id = data_dict['internal_id']
     # internal_id = 100003
     all_internal_ids = list(pd.read_csv('../Data/Raw/Tickets.csv')['internal_id'])
@@ -197,7 +202,7 @@ def create_ticket():
               command=master_window.quit).grid(row=11, column=0, sticky=tk.W, pady=4)
     tk.Button(master_window,
               text='Enter Data',
-              command=lambda: get_values(ticket_number,
+              command=lambda: enter_ticket_logic(ticket_number,
                                          selected_company,
                                          company_jobsite,
                                          date,
