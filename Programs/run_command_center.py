@@ -82,7 +82,7 @@ def run_command_center():
         # This pairs with ttk.Combobox
         company_jobsite_menu.config(values=jobsites[selection_index])
 
-    # Create GUI visual
+    # Create GUI visuals
     company_name_menu = tk.OptionMenu(master_window, selected_company, *list_of_companies)
     company_jobsite_menu = ttk.Combobox(master_window)
     start_date = tk.Entry(master_window, width=25)
