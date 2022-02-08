@@ -5,13 +5,16 @@ import pandas as pd
 from datetime import date
 from csv import writer
 import os
+import sys
 from os.path import abspath
 from inspect import getsourcefile
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import IMX_Utils as utils
 
 
 def generate_invoice(company, jobsite, start_date, end_date):
     try:
-        list_of_date = dates_list(start_date, end_date)
+        list_of_date = utils.dates_list(start_date, end_date)
         ticket_data = pd.read_csv('../Data/Raw/Tickets.csv')
         jobsite_data = ticket_data.loc[(ticket_data['company_name'] == company) & (ticket_data['jobsite']==jobsite)]
         by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_date)]
@@ -27,7 +30,8 @@ def generate_invoice(company, jobsite, start_date, end_date):
         file_path = f'../Data/Reports_To_Process/{file_name}'
         invoice_df.columns = new_col_names
         invoice_df.to_csv(file_path, index=False)
-        # add function to add row to invoices.csv
+        # Save invoice data to invoice table
+        invoice_to_table(company, file_path)
         return True
     except Exception as error:
         print(error)
@@ -41,6 +45,7 @@ def invoice_to_table(company_name, invoice_file):
         Boolean: True if successful
                 False if not successful
     """
+    print('in invoice_to_table')
     invoice_data = pd.read_csv(invoice_file)
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()
@@ -60,6 +65,7 @@ def invoice_to_table(company_name, invoice_file):
 
 
 def next_invoice_num():
+    print('in next invoice num')
     path = '/home/gsandoval/Documents/IMX/IMX/Data/Raw/Invoices.csv'
     invoice_data = pd.read_csv(path, index_col=False)
     latest_num = invoice_data['invoice_num'].max()
@@ -73,12 +79,10 @@ def save_to_invoice(data):
     Returns:
         None
         """
-
-    print('method 1')
-    print(os.path.dirname(os.path.abspath(__file__)))
-    print('method 2')
-    print(abspath(getsourcefile(lambda:0)))
-    with open('../../Data/Raw/Invoices.csv', 'a') as invoice_file:
+    print('in save_to_invoice')
+    print(data)
+    print(type(data))
+    with open('../Data/Raw/Invoices.csv', 'a') as invoice_file:
         writer_object = writer(invoice_file)
         writer_object.writerow(data)
 

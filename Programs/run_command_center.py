@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 import os, sys
 import IMX_Utils as utils
+from IMX_Utilities import invoices as inv
 from IMX_Utilities import invoices
 from dateutil import parser
 
@@ -44,7 +45,7 @@ def invoice_logic(*args):
     start_date = args[2].get()
     end_date = args[3].get()
     print(company, jobsite, start_date, end_date)
-    invoice_result = utils.generate_invoice(company, jobsite, start_date, end_date)
+    invoice_result = inv.generate_invoice(company, jobsite, start_date, end_date)
     if not invoice_result:
         print('there was an error')
         messagebox.showerror(title='Invoice Status',

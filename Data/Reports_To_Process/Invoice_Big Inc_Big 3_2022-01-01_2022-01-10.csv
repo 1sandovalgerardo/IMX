@@ -1,0 +1,9 @@
+Ticket Num,Job Site,Date,Tare Weight,Gross Weight,Net Weight,Material Type,Rate,Total
+1008,Big 3,2022-01-02,1000,2000,1000,wire,30,30000
+1009,Big 3,2022-01-02,0,0,0,hourly,200,0
+1018,Big 3,2022-01-03,100,200,100,Other,50,5000
+1019,Big 3,2022-01-04,100,200,100,upsteel,50,5000
+1020,Big 3,2022-01-05,100,200,100,upsteel,50,5000
+1021,Big 3,2022-01-06,100,200,100,upsteel,50,5000
+1022,Big 3,2022-01-07,100,200,100,upsteel,50,5000
+1023,Big 3,2022-01-07,100,200,100,upsteel,50,5000
