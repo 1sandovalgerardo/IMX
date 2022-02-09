@@ -1,0 +1,6 @@
+date,material_type,net_weight,hours_worked,rate,man_hours,per_hour_production
+2022-01-03,Other,100,0,50,10,10.0
+2022-01-04,upsteel,100,0,50,10,10.0
+2022-01-05,upsteel,100,0,50,10,10.0
+2022-01-06,upsteel,100,0,50,20,5.0
+2022-01-07,upsteel,200,0,100,30,6.667

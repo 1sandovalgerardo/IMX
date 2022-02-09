@@ -1,0 +1,4 @@
+employee_id,first_name,middle_name,last_name,phone,status,Nickname
+1001, Gerardo,“”, Sandoval, 123-456-7891, True,
+1002, Fred,“”,Barker, 198-765-4321, True,
+1002, Heather,“”, Barker, 123-456-7889, True,
