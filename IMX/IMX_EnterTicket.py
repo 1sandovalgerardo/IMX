@@ -10,8 +10,8 @@ import sys
 
 # TODO: if duplicate ticket, notify where the dup ticket is
 
-for item in sys.path:
-    print(item)
+#for item in sys.path:
+#    print(item)
 
 
 

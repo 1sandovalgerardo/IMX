@@ -3,7 +3,7 @@
 #import pandas as pd
 #import os, sys
 from collections import defaultdict
-from . import data
+import data
 
 
 

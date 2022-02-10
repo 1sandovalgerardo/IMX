@@ -10,11 +10,28 @@ DATA_DIR = os.path.join(ROOT_DIR, 'Data')
 TICKETS_CSV = os.path.join(DATA_DIR, 'Raw', 'Tickets.csv')
 COMPANIES_CSV = os.path.join(DATA_DIR, 'Raw', 'Companies.csv')
 JOBSITE_CSV = os.path.join(DATA_DIR, 'Raw', 'Jobsite.csv')
+HOURS_WORKED = os.path.join(DATA_DIR, 'Raw', 'Hours_Worked.csv')
+
 
 def tickets_data():
     tickets_path = os.path.join(DATA_DIR,'Raw', 'Tickets.csv')
     data = pd.read_csv(tickets_path, index_col=False)
     return data
+
+
+def hours_worked_data():
+    data = pd.read_csv(HOURS_WORKED, index_col=False)
+    return data
+
+
+def get_companies():
+    """ Returns a list of companies found in the Companies.csv file"""
+    logging.info('get_companies() called')
+    data = pd.read_csv(COMPANIES_CSV, index_col=False)
+    list_of_companies = list(data['company_name'])
+    logging.debug(list_of_companies)
+    logging.debug('get_companies() ended')
+    return list_of_companies
 
 
 def next_ticket_id():
@@ -35,15 +52,6 @@ def save_ticket_data(ticket_data):
         print(e)
     return True
 
-
-def get_companies():
-    """ Returns a list of companies found in the Companies.csv file"""
-    logging.info('get_companies() called')
-    data = pd.read_csv(COMPANIES_CSV, index_col=False)
-    list_of_companies = list(data['company_name'])
-    logging.debug(list_of_companies)
-    logging.debug('get_companies() ended')
-    return list_of_companies
 
 
 def get_paired_company_jobsite():

@@ -1,16 +1,8 @@
-from . import tickets
-from . import data
-from . import jobsite
+#!/usr/bin/env python
+
+import datetime as dt
 from dateutil import parser
 from datetime import timedelta
-import datetime as dt
-
-
-
-__all__ = ['tickets',
-           'data',
-           'jobsite'
-           ]
 
 
 def dates_list(start_date, end_date):
@@ -28,4 +20,6 @@ def dates_list(start_date, end_date):
         list_of_dates.append(date_to_add)
     list_of_dates = [str(date) for date in list_of_dates]
     return list_of_dates
+
+
 
