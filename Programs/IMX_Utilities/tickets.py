@@ -6,7 +6,7 @@ Usage:
 """
 
 import pandas as pd
-import numpy as np
+#import numpy as np
 import os, sys
 from collections import defaultdict
 from csv import writer
