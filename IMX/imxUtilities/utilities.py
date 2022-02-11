@@ -3,6 +3,7 @@
 import datetime as dt
 from dateutil import parser
 from datetime import timedelta
+import logging
 
 
 def dates_list(start_date, end_date):
@@ -20,6 +21,24 @@ def dates_list(start_date, end_date):
         list_of_dates.append(date_to_add)
     list_of_dates = [str(date) for date in list_of_dates]
     return list_of_dates
+
+
+def create_log(debug, gui):
+    if debug:
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
+
+        fileHandler = logging.FileHandler(f'{gui}.log', 'w')
+        fileHandler.setLevel(logging.DEBUG)
+        fileHandler.setFormatter(formatter)
+        logger.addHandler(fileHandler)
+
+        shellHandler = logging.StreamHandler()
+        shellHandler.setLevel(logging.WARNING)
+        logger.addHandler(shellHandler)
+        logging.debug('logging established')
+
 
 
 

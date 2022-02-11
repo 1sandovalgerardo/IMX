@@ -1,17 +1,22 @@
 #!/usr/bin/env python
+import traceback
 
 import numpy as np
 import pandas as pd
 import os
+import logging
+from datetime import date
+import traceback
+from IPython import embed
 
-import data
-import utilities
+
+from . import data
+from . import utilities
 
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT_DIR, 'Data')
-print(ROOT_DIR)
-print(DATA_DIR)
+REPORT_TO_PROCESS = os.path.join(DATA_DIR, 'Reports_To_Process')
 
 def jobsite_production(jobsite, start_date, end_date, to_file=False):
     """
@@ -30,7 +35,8 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     total_man_hours = pd.DataFrame({'date': dates, 'man_hours':hours})
     total_tons_cut = tons_cut(jobsite, start_date, end_date, return_dates=True)
     total_tons_cut = total_tons_cut.reset_index()
-    final_df = total_tons_cut.merge(total_man_hours)
+    #embed()
+    final_df = total_tons_cut.merge(total_man_hours, how='outer', left_index=True, right_index=True)
     final_df['per_hour_production'] = round(final_df.net_weight / final_df.man_hours, 3)
     # saves output to directory Reports_To_Process
     if to_file:
@@ -81,7 +87,7 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
     # fileter for jobsite
     list_of_contractors = site_data.loc[site_data['jobsite'] == jobsite]
     # get list of desired dates
-    list_of_dates = utils.dates_list(start_date, end_date)
+    list_of_dates = utilities.dates_list(start_date, end_date)
     contractor_ids = []
     # look through list of dates to filter for contractors at the jobsite on that date
     for date in list_of_dates:
@@ -153,4 +159,69 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
     else:
         total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()['net_weight']
         return total_weights
+
+
+def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
+    hours_data = data.hours_worked_data()
+    list_of_dates = utilities.dates_list(start_date, end_date)
+    site_data = hours_data[hours_data['jobsite'] == jobsite]
+    by_date = site_data[site_data['date'].isin(list_of_dates)]
+    grouped_data = by_date.groupby(['date', 'contractor_id',
+                                    'first_name', 'last_name']).sum()
+    if 'to_file' in kwargs.keys():
+        print('in to file')
+        print(grouped_data)
+        file_name = f'HoursWorked_{jobsite}_{start_date}_{end_date}.csv'
+        #file_path = f'../Data/Reports_To_Process/{file_name}'
+        file_path = os.path.join(DATA_DIR, 'Reports_To_Process', 'file_name')
+        # I do not use index=False here because the index contains the date, id, and names
+        grouped_data.to_csv(file_path, sep=',')
+    grouped_data = grouped_data[['hours_worked']]
+    return grouped_data
+
+
+def generate_invoice(company, jobsite, start_date, end_date):
+    try:
+        logging.debug('In generate_invoice')
+        list_of_dates = utilities.dates_list(start_date, end_date)
+        ticket_data = data.tickets_data()
+        jobsite_data = ticket_data.loc[
+            (ticket_data['company_name'] == company) & (ticket_data['jobsite'] == jobsite)]
+        by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_dates)]
+        invoice_df = by_date[['ticket_number', 'jobsite', 'date', 'tare_weight', 'gross_weight',
+                              'net_weight', 'material_type', 'rate']]
+        invoice_df['Total'] = invoice_df['rate'] * invoice_df['net_weight']
+        new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+                         'Net Weight', 'Material Type', 'Rate', 'Total']
+        # new invoice is here as the invoice is not yet added to the table.
+        # Hence, the table entry will generate the same invoice number
+        new_invoice_num = data.next_invoice_num()
+        file_name = f'Invoice_{new_invoice_num}_{company}_{jobsite}_{start_date}_{end_date}.csv'
+        file_path = os.path.join(REPORT_TO_PROCESS, file_name)
+        logging.info(f'invoice file name: {file_path}')
+        invoice_df.columns = new_col_names
+        # Save invoice data for IMX formatting
+        invoice_df.to_csv(file_path, index=False, mode='w')
+        # Save invoice data to invoice table
+        logging.debug(f'invoice data: \n {invoice_df}')
+        embed()
+        invoice_to_table(invoice_df, new_invoice_num, company)
+        return True
+    except Exception as error:
+        print(error)
+        print(traceback.format_exc())
+        return False
+
+
+def invoice_to_table(invoice_data, invoice_num, company_name):
+    logging.debug('In invoice_to_table')
+    total_weight = invoice_data['Net Weight'].sum()
+    total_revenue = invoice_data['Total'].sum()
+    job_site = invoice_data['Job Site'].unique()[0]
+    sent_status = True
+    sent_date = date.today()
+    paid_status = False
+    data_to_save = [invoice_num, company_name, job_site,
+                    total_weight, total_revenue, sent_status, sent_date, paid_status]
+    data.save_to_invoice(data_to_save)
 

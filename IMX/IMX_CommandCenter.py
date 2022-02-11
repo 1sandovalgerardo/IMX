@@ -3,16 +3,44 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-import imxUtilities as utils
+from dateutil import parser
 
+import imxUtilities as utils
+from imxUtilities import jobsite
+from imxUtilities import utilities
 
 def payroll_logic(*args):
     jobsite = args[0].get()
-    start_date = args[1].get()
-    end_date = args[2].get()
-    utils.jobsite_production(jobsite, start_date, end_date, to_file=True)
-    utils.jobsite_hours_worked(jobsite, start_date, end_date, to_file=True)
+    start_date = parser.parse(args[1].get()).date()
+    end_date = parser.parse(args[2].get()).date()
+    print(start_date, end_date)
+    print(type(start_date))
+    utils.jobsite.jobsite_production(jobsite, start_date, end_date, to_file=True)
+    utils.jobsite.jobsite_hours_worked(jobsite, start_date, end_date, to_file=True)
     payroll_completed()
+
+def payroll_completed():
+    message = 'Payroll Entered'
+    messagebox.showinfo(title='Payroll Entered',
+                        message = message)
+
+
+def invoice_logic(*args):
+    company = args[0].get()
+    jobsite_name = args[1].get()
+    start_date = parser.parse(args[2].get()).date()
+    end_date = parser.parse(args[3].get()).date()
+    print(company, jobsite, start_date, end_date)
+    invoice_result = jobsite.generate_invoice(company, jobsite_name, start_date, end_date)
+    if not invoice_result:
+        print('there was an error')
+        messagebox.showerror(title='Invoice Status',
+                             message='Invoice Not Created')
+    if invoice_result:
+        messagebox.showinfo(title='Invoice Status',
+                            message='Invoice Created')
+    return None
+
 
 def run_control_center():
     master_window = tk.Tk()
@@ -77,6 +105,9 @@ def run_control_center():
 
 
 def main():
-    run_command_center()
+    utilities.create_log(True, 'Command_Center')
+    run_control_center()
     # utils.jobsite_hours_worked('Big 3', '2022-01-03', '2022-01-07', to_file=True)
 
+if __name__=='__main__':
+    main()

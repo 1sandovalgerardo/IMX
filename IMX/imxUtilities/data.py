@@ -11,6 +11,7 @@ TICKETS_CSV = os.path.join(DATA_DIR, 'Raw', 'Tickets.csv')
 COMPANIES_CSV = os.path.join(DATA_DIR, 'Raw', 'Companies.csv')
 JOBSITE_CSV = os.path.join(DATA_DIR, 'Raw', 'Jobsite.csv')
 HOURS_WORKED = os.path.join(DATA_DIR, 'Raw', 'Hours_Worked.csv')
+INVOICES_CSV = os.path.join(DATA_DIR, 'Raw', 'Invoices.csv')
 
 
 def tickets_data():
@@ -41,6 +42,14 @@ def next_ticket_id():
     return new_internal_id
 
 
+def next_invoice_num():
+    """Returns the next internal invoice number."""
+    logging.debug('In next_invoice_num()')
+    invoice_data = pd.read_csv(INVOICES_CSV)
+    latest_num = int(invoice_data['invoice_num'].max())
+    return latest_num + 1
+
+
 def save_ticket_data(ticket_data):
     '''Write row of data to Tickets.csv'''
     try:
@@ -51,6 +60,13 @@ def save_ticket_data(ticket_data):
         print('error in save_ticket_data')
         print(e)
     return True
+
+
+def save_to_invoice(data):
+    logging.debug(data)
+    with open(INVOICES_CSV, 'a') as invoice_file:
+        writer_object = writer(invoice_file)
+        writer_object.writerow(data)
 
 
 
@@ -77,7 +93,8 @@ def main():
     #tickets_data()
     #print(next_ticket_id())
     #print(get_companies())
-    print(get_paired_company_jobsite())
+    #print(get_paired_company_jobsite())
+    next_invoice_num()
 
 
 if __name__=="__main__":

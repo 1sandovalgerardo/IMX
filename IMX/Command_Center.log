@@ -1,0 +1,22 @@
+DEBUG:root:logging established
+INFO:root:get_companies() called
+DEBUG:root:['JBI Scrap Processors ', 'Cohen Recycling ', 'BL Duke ', 'Bridgeport Metals ', 'Kimmel Scrap Iron & Metal ', 'Redline Metalsl, Inc.']
+DEBUG:root:get_companies() ended
+DEBUG:root:get_paired_company_jobsite() called
+INFO:root:get_companies() called
+DEBUG:root:['JBI Scrap Processors ', 'Cohen Recycling ', 'BL Duke ', 'Bridgeport Metals ', 'Kimmel Scrap Iron & Metal ', 'Redline Metalsl, Inc.']
+DEBUG:root:get_companies() ended
+DEBUG:root:get_paired_company_jobsite() ended
+DEBUG:root:In generate_invoice
+DEBUG:root:In next_invoice_num()
+INFO:root:invoice file name: /home/gsandoval/Documents/IMX/IMX/IMX/Data/Reports_To_Process/Invoice_1005_JBI Scrap Processors _JBI _2022-01-01_2022-02-05.csv
+DEBUG:root:invoice data: 
+    Ticket Num Job Site        Date  Tare Weight  Gross Weight  Net Weight          Material Type  Rate  Total
+3      308466     JBI   2022-02-02          0.0           0.0     25900.0  5_foot_heavy_torching   0.0    0.0
+4      308467     JBI   2022-02-02          0.0           0.0     28100.0  5_foot_heavy_torching   0.0    0.0
+5      308468     JBI   2022-02-02          0.0           0.0     40400.0  5_foot_heavy_torching   0.0    0.0
+6      308470     JBI   2022-02-02          0.0           0.0     26800.0  5_foot_heavy_torching   0.0    0.0
+DEBUG:asyncio:Using selector: EpollSelector
+DEBUG:asyncio:Using selector: EpollSelector
+DEBUG:root:In invoice_to_table
+DEBUG:root:[1005, 'JBI Scrap Processors ', 'JBI ', 121200.0, 0.0, True, datetime.date(2022, 2, 11), False]

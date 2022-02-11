@@ -3,4 +3,7 @@ invoice_num,company,job_site,total_tons,total_revenue,sent,date_sent,paid,date_p
 1002,Big 3,Big 3,600,30000,True,2022-02-08,,
 1003,Big Inc,Big 3,1600,60000,True,2022-02-08,False
 1004,Big Inc,Big 3,1600,60000,True,2022-02-08,False
-1005,JBI Scrap Processors ,JBI ,121200.0,0.0,True,2022-02-11,False
+1005,Big Inc,Big 3,1600,60000,True,2022-02-11,False
+1006,Big Inc,Big 3,1600,60000,True,2022-02-11,False
+1007,Big Inc,Big 2,1100,30000,True,2022-02-11,False
+1008,Big Inc,Big 3,1600,60000,True,2022-02-11,False

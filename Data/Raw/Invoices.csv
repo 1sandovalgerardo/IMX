@@ -3,3 +3,4 @@ invoice_num,company,job_site,total_tons,total_revenue,sent,date_sent,paid,date_p
 1002,Big 3,Big 3,600,30000,True,2022-02-08,,
 1003,Big Inc,Big 3,1600,60000,True,2022-02-08,False
 1004,Big Inc,Big 3,1600,60000,True,2022-02-08,False
+1005,Big Inc,Big 3,1600,60000,True,2022-02-10,False
