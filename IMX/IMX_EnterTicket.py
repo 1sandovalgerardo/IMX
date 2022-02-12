@@ -50,12 +50,16 @@ def enter_ticket(*args):
     """Primary gui logic"""
     ticket_data = utils.tickets.get_ticket_values(*args)
     data_to_write = utils.tickets.clean_ticket(ticket_data)
+    if not perform_checks(args[0], args[6], args[7], args[8]):
+        messagebox.showerror('Ticket Not Entered',
+                             message="Data Not Entered")
+        return False
     if utils.data.save_ticket_data(data_to_write):
         messagebox.showinfo('Ticket Entered',
                             message='Ticket Entered Successfully')
     else:
         messagebox.showerror('Ticket Not Entered',
-                             message='Data Not Saved')
+                             message='Data Not Entered')
 def ticket_entry_window():
     master_window = tk.Tk()
     master_window.title('IMX Ticket Entry')
@@ -65,7 +69,7 @@ def ticket_entry_window():
     tk.Label(master_window, text='Job Site').grid(row=2, sticky='se')
     tk.Label(master_window, text='Date (yyyy-mm-dd)').grid(row=3, sticky='se')
     tk.Label(master_window, text='Week Cut').grid(row=3, column=2, sticky='se')
-    tk.Label(master_window, text='Employees (separate with comma)').grid(row=4, sticky='se')
+    tk.Label(master_window, text='Contractors (separate with comma)').grid(row=4, sticky='se')
     tk.Label(master_window, text='Gross Weight').grid(row=5, sticky='se')
     tk.Label(master_window, text='Tare Weight').grid(row=6, sticky='se')
     tk.Label(master_window, text='Net Weight').grid(row=7, sticky='se')
@@ -111,7 +115,7 @@ def ticket_entry_window():
     company_jobsite   =  ttk.Combobox(master_window, width=20)
     date              =  tk.Entry(master_window, width=20)
     attribute_date    =  ttk.Entry(width=20)
-    employees         =  tk.Entry(master_window, width=37)
+    contractor         =  tk.Entry(master_window, width=37)
     gross_weight      =  tk.Entry(master_window, width=20)
     tare_weight       =  tk.Entry(master_window, width=20)
     net_weight        =  tk.Entry(master_window, width=20)
@@ -124,7 +128,7 @@ def ticket_entry_window():
     company_jobsite.grid(row=2, column=1, sticky='w')
     date.grid(          row=3,  column=1, sticky='w')
     attribute_date.grid(row=3,  column=3, sticky='w')
-    employees.grid(     row=4,  column=1, sticky='w')
+    contractor.grid(     row=4,  column=1, sticky='w')
     gross_weight.grid(  row=5,  column=1, sticky='w')
     tare_weight.grid(   row=6,  column=1, sticky='w')
     net_weight.grid(    row=7,  column=1, sticky='w')
@@ -154,7 +158,7 @@ def ticket_entry_window():
                                                               company_jobsite,
                                                               date,
                                                               attribute_date,
-                                                              employees,
+                                                              contractor,
                                                               gross_weight,
                                                               tare_weight,
                                                               net_weight,

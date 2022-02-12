@@ -3,6 +3,8 @@
 #import pandas as pd
 #import os, sys
 from collections import defaultdict
+from dateutil import parser
+
 from . import data
 
 
@@ -18,7 +20,7 @@ def get_ticket_values(*ticket_data):
     Returns a dictionary.
     """
     key_order = ['ticket_number', 'selected_company', 'company_jobsite', 'date',
-                 'attribute_date', 'employees',  'gross_weight', 'tare_weight',
+                 'attribute_date', 'contractor',  'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
     data_dict = defaultdict()
     for key, value in zip(key_order, ticket_data):
@@ -26,6 +28,7 @@ def get_ticket_values(*ticket_data):
             data_dict[key] = 0
         else:
             data_dict[key] = value.get()
+    data_dict['date'] = parser.parse(data_dict['date']).date()
     if data_dict['attribute_date']==0:
         data_dict['attribute_date'] = data_dict['date']
     return data_dict
@@ -39,14 +42,14 @@ def clean_ticket(data_dict):
         list: data to write to file
     """
     key_order = ['ticket_number', 'internal_ticket', 'selected_company', 'company_jobsite', 'date',
-                 'attribute_date', 'employees',  'num_of_employees', 'gross_weight', 'tare_weight',
+                 'attribute_date', 'contractors',  'num_of_contractors', 'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
     data_to_write = []
     for key in key_order:
         if key == 'internal_ticket':
             data_to_write.append(data.next_ticket_id())
-        elif key == 'num_of_employees':
-            data_to_write.append(len(data_dict['employees'].split(',')))
+        elif key == 'num_of_contractors':
+            data_to_write.append(len(data_dict['contractors'].split(',')))
         else:
             data_to_write.append(data_dict[key])
     return data_to_write

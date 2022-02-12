@@ -32,7 +32,7 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     total_man_hours = jobsite_man_hours(jobsite, start_date, end_date, return_dates=True)
     hours = total_man_hours.values
     dates = total_man_hours.index
-    total_man_hours = pd.DataFrame({'date': dates, 'man_hours':hours})
+    total_man_hours = pd.DataFrame({'date': dates, 'man_hours': hours})
     total_tons_cut = tons_cut(jobsite, start_date, end_date, return_dates=True)
     total_tons_cut = total_tons_cut.reset_index()
     #embed()
@@ -45,6 +45,27 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
         full_path = os.path.join(DATA_DIR, 'Reports_To_Process', file_name)
         final_df.to_csv(full_path, index=False)
     return final_df
+
+
+def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
+    hours_data = data.hours_worked_data()
+    list_of_dates = utilities.dates_list(start_date, end_date)
+    site_data = hours_data[hours_data['jobsite'] == jobsite]
+    by_date = site_data[site_data['date'].isin(list_of_dates)]
+    grouped_data = by_date.groupby(['date', 'contractor_id',
+                                    'first_name', 'last_name']).sum()
+    if 'to_file' in kwargs.keys():
+        print('in to file')
+        print(grouped_data)
+        file_name = f'HoursWorked_{jobsite}_{start_date}_{end_date}.csv'
+        #file_path = f'../Data/Reports_To_Process/{file_name}'
+        file_path = os.path.join(DATA_DIR, 'Reports_To_Process', file_name)
+        # I do not use index=False here because the index contains the date, id, and names
+        # this is due to the group by
+        grouped_data.to_csv(file_path, sep=',')
+    grouped_data = grouped_data[['hours_worked']]
+    return grouped_data
+
 
 
 def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
@@ -111,7 +132,7 @@ def contractor_weekly_hours(contractor, jobsite, start_date, end_date, **kwargs)
         if no kwargs: returns int of total hours a contractor worked over the desired date range.
         else: returns dataframe
     """
-    dates_to_sum = utils.dates_list(start_date, end_date)
+    dates_to_sum = utilities.dates_list(start_date, end_date)
     hours_worked = []
     # Used to return dates the hours where worked
     if 'return_dates' in kwargs.keys():
@@ -161,24 +182,6 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
         return total_weights
 
 
-def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
-    hours_data = data.hours_worked_data()
-    list_of_dates = utilities.dates_list(start_date, end_date)
-    site_data = hours_data[hours_data['jobsite'] == jobsite]
-    by_date = site_data[site_data['date'].isin(list_of_dates)]
-    grouped_data = by_date.groupby(['date', 'contractor_id',
-                                    'first_name', 'last_name']).sum()
-    if 'to_file' in kwargs.keys():
-        print('in to file')
-        print(grouped_data)
-        file_name = f'HoursWorked_{jobsite}_{start_date}_{end_date}.csv'
-        #file_path = f'../Data/Reports_To_Process/{file_name}'
-        file_path = os.path.join(DATA_DIR, 'Reports_To_Process', 'file_name')
-        # I do not use index=False here because the index contains the date, id, and names
-        grouped_data.to_csv(file_path, sep=',')
-    grouped_data = grouped_data[['hours_worked']]
-    return grouped_data
-
 
 def generate_invoice(company, jobsite, start_date, end_date):
     try:
@@ -186,7 +189,8 @@ def generate_invoice(company, jobsite, start_date, end_date):
         list_of_dates = utilities.dates_list(start_date, end_date)
         ticket_data = data.tickets_data()
         jobsite_data = ticket_data.loc[
-            (ticket_data['company_name'] == company) & (ticket_data['jobsite'] == jobsite)]
+            (ticket_data['company_name'] == company) &
+            (ticket_data['jobsite'] == jobsite)]
         by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_dates)]
         invoice_df = by_date[['ticket_number', 'jobsite', 'date', 'tare_weight', 'gross_weight',
                               'net_weight', 'material_type', 'rate']]
@@ -204,7 +208,6 @@ def generate_invoice(company, jobsite, start_date, end_date):
         invoice_df.to_csv(file_path, index=False, mode='w')
         # Save invoice data to invoice table
         logging.debug(f'invoice data: \n {invoice_df}')
-        embed()
         invoice_to_table(invoice_df, new_invoice_num, company)
         return True
     except Exception as error:

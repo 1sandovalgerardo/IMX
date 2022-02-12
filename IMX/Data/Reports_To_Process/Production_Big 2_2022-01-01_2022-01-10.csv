@@ -1,4 +1,0 @@
-attribute_date,material_type,net_weight,hours_worked,rate,date,man_hours,per_hour_production
-2022-01-01,upsteel,100.0,0.0,50.0,2022-01-03,10,10.0
-2022-01-02,rebar,1000.0,0.0,25.0,2022-01-04,10,100.0
-,,,,,2022-01-05,10,

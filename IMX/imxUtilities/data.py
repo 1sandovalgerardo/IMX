@@ -12,7 +12,21 @@ COMPANIES_CSV = os.path.join(DATA_DIR, 'Raw', 'Companies.csv')
 JOBSITE_CSV = os.path.join(DATA_DIR, 'Raw', 'Jobsite.csv')
 HOURS_WORKED = os.path.join(DATA_DIR, 'Raw', 'Hours_Worked.csv')
 INVOICES_CSV = os.path.join(DATA_DIR, 'Raw', 'Invoices.csv')
+CONTRACTORS_CSV = os.path.join(DATA_DIR, 'Raw', 'Contractors.csv')
 
+
+def clean_contractors():
+    c_data = pd.read_csv(CONTRACTORS_CSV)
+    c_data['first_name'] = c_data['first_name'].str.strip().str.title()
+    c_data['last_name'] = c_data['last_name'].str.strip().str.title()
+    c_data['nickname'] = c_data['nickname'].str.strip().str.title()
+    c_data['Address'] = c_data['Address'].str.split(' ')
+    c_data['address'] = [x[:-3] for x in c_data['Address']]
+    c_data['city'] = [x[-3] for x in c_data['Address']]
+    c_data['state'] = [x[-2] for x in c_data['Address']]
+    c_data['zip_code'] = c_data['Address'].str.get(-1)
+    file_name = os.path.join(DATA_DIR, 'Raw', 'Contractors2.csv')
+    c_data.to_csv(file_name, index=False)
 
 def tickets_data():
     tickets_path = os.path.join(DATA_DIR,'Raw', 'Tickets.csv')
@@ -33,6 +47,33 @@ def get_companies():
     logging.debug(list_of_companies)
     logging.debug('get_companies() ended')
     return list_of_companies
+
+
+def get_paired_company_jobsite():
+    """ Returns a tuple of two values. Each value is a list.
+        The purpose of this is to have a company and jobsite list that are at the same
+        index position within their respective list.
+        This is for functionality of the drop down menus within the gui."""
+    logging.debug('get_paired_company_jobsite() called')
+    jobsite_data = pd.read_csv(JOBSITE_CSV, index_col=False)
+    print(jobsite_data)
+    list_of_companies = get_companies()
+    print(list_of_companies)
+    jobsites = []
+    for company in list_of_companies:
+        jobsites_at_company = jobsite_data.loc[jobsite_data['company_name']==company]['jobsite_name']
+        jobsites.append(jobsites_at_company.to_list())
+    logging.debug('get_paired_company_jobsite() ended')
+    return list_of_companies, jobsites
+
+
+def get_material_rate(company, jobsite):
+    jobsite_data = pd.read_csv(JOBSITE_CSV, index_col=False)
+    jobsite_data = jobsite_data.loc[(jobsite_data['company_name'].str.strip() == company) &
+                                    (jobsite_data['jobsite_name'].str.strip()==jobsite)]
+    print(jobsite_data)
+
+
 
 
 def next_ticket_id():
@@ -70,31 +111,16 @@ def save_to_invoice(data):
 
 
 
-def get_paired_company_jobsite():
-    """ Returns a tuple of two values. Each value is a list.
-        The purpose of this is to have a company and jobsite list that are at the same
-        index position within their respective list.
-        This is for functionality of the drop down menus within the gui."""
-    logging.debug('get_paired_company_jobsite() called')
-    jobsite_data = pd.read_csv(JOBSITE_CSV, index_col=False)
-    list_of_companies = get_companies()
-    jobsites = []
-    for company in list_of_companies:
-        jobsites_at_company = jobsite_data.loc[jobsite_data['company_name']==company]['jobsite_name']
-        jobsites.append(jobsites_at_company.to_list())
-    logging.debug('get_paired_company_jobsite() ended')
-    return list_of_companies, jobsites
-
 
 
 def main():
-    print(ROOT_DIR)
-    print(DATA_DIR)
     #tickets_data()
     #print(next_ticket_id())
     #print(get_companies())
     #print(get_paired_company_jobsite())
-    next_invoice_num()
+    #next_invoice_num()
+    #get_material_rate('Cohen Recycling', 'Vine')
+    clean_contractors()
 
 
 if __name__=="__main__":
