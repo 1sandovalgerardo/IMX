@@ -56,9 +56,7 @@ def get_paired_company_jobsite():
         This is for functionality of the drop down menus within the gui."""
     logging.debug('get_paired_company_jobsite() called')
     jobsite_data = pd.read_csv(JOBSITE_CSV, index_col=False)
-    print(jobsite_data)
     list_of_companies = get_companies()
-    print(list_of_companies)
     jobsites = []
     for company in list_of_companies:
         jobsites_at_company = jobsite_data.loc[jobsite_data['company_name']==company]['jobsite_name']

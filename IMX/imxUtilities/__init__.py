@@ -9,7 +9,8 @@ import datetime as dt
 
 __all__ = ['tickets',
            'data',
-           'jobsite'
+           'jobsite',
+           'utilities'
            ]
 
 
