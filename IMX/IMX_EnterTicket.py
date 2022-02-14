@@ -91,9 +91,23 @@ def ticket_entry_window():
         abc = eventObject.widget.get()
         # Gets the company that was choosen in the options menu
         company_selected = selected_company.get()
+        logging.debug(f'Company Selected: {company_selected}')
         index = company_names.index(company_selected)
+        logging.debug(f'List of jobsites: {job_sites[index]}')
         company_jobsite.config(values=job_sites[index])
 
+    # for material combobox
+    def callback2(eventObject):
+        #abc = eventObject.widget.get()
+        jobsite_selected = company_jobsite.get()
+        logging.debug(f'Material Jobsite Selected: {jobsite_selected}')
+        # get dictionary of materials(keys) and rates(values)
+        material_rates = utils.tickets.get_jobsite_rates(jobsite_selected)
+        logging.debug(f'Dictionary : {material_rates}')
+        list_material_rates = utils.tickets.jobsite_rate_to_list(material_rates)
+        material_type.config(values=list_material_rates)
+
+    """
     # Dropdown for material types
     metal_options = ['1_foot_heavy_torching', '2_foot', '2_foot_rail_road_crops',
                      '3_foot', '3_foot_heavy_torch', '3_foot_nitro',
@@ -107,6 +121,7 @@ def ticket_entry_window():
                      'hourly', 'overtime']
     selected_metal = tk.StringVar()
     selected_metal.set('Select Material / Product')
+    """
 
     # Entry windows and options menus
 
@@ -120,7 +135,7 @@ def ticket_entry_window():
     tare_weight       =  tk.Entry(master_window, width=20)
     net_weight        =  tk.Entry(master_window, width=20)
     hours_worked      =  tk.Entry(master_window, width=20)
-    material_type     =  tk.OptionMenu(master_window, selected_metal, *metal_options)
+    material_type     =  ttk.Combobox(master_window)
     rate              =  tk.Entry(master_window, width=20)
 
     ticket_number.grid( row=0,  column=1, sticky='w')
@@ -140,6 +155,9 @@ def ticket_entry_window():
     # button 1 refers to left click of mouse
     # 2nd arg is the function that is triggered.
     company_jobsite.bind('<Button-1>', callback)
+
+    # Combobox for material type
+    material_type.bind('<Button-1>', callback2)
 
     # BUTTONS
     close_button = tk.Button(master_window,
@@ -163,7 +181,8 @@ def ticket_entry_window():
                                                               tare_weight,
                                                               net_weight,
                                                               hours_worked,
-                                                              selected_metal,
+                                                              #selected_metal,
+                                                              material_type,
                                                               rate))
     # SET BUTTONS
     close_button.grid(row=11, column=0, pady=4)

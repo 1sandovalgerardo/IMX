@@ -39,6 +39,9 @@ def hours_worked_data():
     return data
 
 
+def jobsite_data():
+    return pd.read_csv(JOBSITE_CSV, index_col=False)
+
 def get_companies():
     """ Returns a list of companies found in the Companies.csv file"""
     logging.info('get_companies() called')

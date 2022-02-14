@@ -41,12 +41,18 @@ def get_jobsite_rates(jobsite):
             material_rates[col] = site_data[col].iloc[0]
     return material_rates
 
-def main():
-    data = get_jobsite_rates('JBI')
-    print(data)
-    data = get_jobsite_rates('Detroit Yard')
 
-    print(data)
+def jobsite_rate_to_list(jobsite_rates_dict):
+    output_list = []
+    for key, value in jobsite_rates_dict.items():
+        output_list.append(':'.join((key, str(value))))
+    print(output_list)
+
+def main():
+    data = get_jobsite_rates('Detroit Yard')
+    jobsite_rate_to_list(data)
+
+
 
 if __name__=='__main__':
     main()

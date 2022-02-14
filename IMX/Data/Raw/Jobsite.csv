@@ -1,12 +1,12 @@
 company_name,company_id,jobsite_name,jobsite_id,Heavy Metal_5,3 Foot,Wire,2 Foot,Cast,Coils,Clip,Plate and Structure,Electric Motor,1 Foot,hourly,active_site,Address,City,State
 JBI Scrap Processors,1001,JBI,JBI1,35,50,100,,,,,,,,,True ,3018 E 55th St,Cleveland,OH
-Cohen Recycling,1002,Vine  ,CR_V,35,50,,65,55,65,,,,,,True ,5300 Vine st. ,Saint Bernard,OH
-Cohen Recycling,1002,Macon ,CR_Ma,35,50,,65,55,65,,,,,,True ,,,
-Cohen Recycling,1002,Sardinia ,CR_S,35,50,,65,55,65,,,,,,True ,1390 Oak Leaf Road ,Sardinia ,OH
-Cohen Recycling,1002,Middletown ,CR_Mid,35,50,,65,55,65,,,,,,False ,1520 14th Ave ,Middletown,OH
-BL Duke,1003,Joliet ,BLD_J,30,,,,,,,,,,35,True ,,Joliet ,IL
-BL Duke,1003,Forest View ,BLD_FV,30,,,,,,,,,,35,True ,,Forest View ,IL
-Bridgeport Metals,1004,Racine ,BM_R,30,,,,,,,,,,,True ,,,IL
+Cohen Recycling,1002,Vine,CR_V,35,50,,65,55,65,,,,,,True ,5300 Vine st. ,Saint Bernard,OH
+Cohen Recycling,1002,Macon,CR_Ma,35,50,,65,55,65,,,,,,True ,,,
+Cohen Recycling,1002,Sardinia,CR_S,35,50,,65,55,65,,,,,,True ,1390 Oak Leaf Road ,Sardinia ,OH
+Cohen Recycling,1002,Middletown,CR_Mid,35,50,,65,55,65,,,,,,False ,1520 14th Ave ,Middletown,OH
+BL Duke,1003,Joliet,BLD_J,30,,,,,,,,,,35,True ,,Joliet ,IL
+BL Duke,1003,Forest View,BLD_FV,30,,,,,,,,,,35,True ,,Forest View ,IL
+Bridgeport Metals,1004,Racine,BM_R,30,,,,,,,,,,,True ,,,IL
 Bridgeport Metals,1004,East Chicago,BM_EC,30,,,,,,,,,,,True ,,,IL
 Kimmel Scrap Iron & Metal,1005,Detroit Yard,KS_D,30,,,,,,30,30,0.025,,,True ,10571 W. Grand River,Detroit,MI
-"Redline Metals, Inc",1006,Redline ,RM_E,30,,,27,,27,,,,60,,True ,,Elgin ,IL
+"Redline Metalsl, Inc.",1006,Redline,RM_E,30,,,27,,27,,,,60,,True ,,Elgin ,IL
