@@ -108,22 +108,6 @@ def ticket_entry_window():
         list_material_rates = utils.tickets.jobsite_rate_to_list(material_rates)
         material_type.config(values=list_material_rates)
 
-    """
-    # Dropdown for material types
-    metal_options = ['1_foot_heavy_torching', '2_foot', '2_foot_rail_road_crops',
-                     '3_foot', '3_foot_heavy_torch', '3_foot_nitro',
-                     '3_foot_rail_crops', '4_foot_cable', '4_foot_gt',
-                     '4_foot_heavy_torch', '4_foot_rail_crops', '5_foo_and_less',
-                     '5_foot', '5_foot_heavy_torching', '5_foot_manganese',
-                     '5_foot_ship_plate', '5_foot_x_2_foot', 'cast', 'coil_torching',
-                     'electric_motor', 'equiptment_plate', 'ferrous_skulls', 'heavy_melt',
-                     'mill_rolls', 'rail_car', 'rail_car', 'railroad_railcar', 'rebar_wire_cable',
-                     'rod_coils', 'wheel_axel',
-                     'hourly', 'overtime']
-    selected_metal = tk.StringVar()
-    selected_metal.set('Select Material / Product')
-    """
-
     # Entry windows and options menus
 
     ticket_number     =  tk.Entry(master_window, width=20)
@@ -194,6 +178,7 @@ def ticket_entry_window():
 
 
 def main():
+    utils.utilities.create_log(True, 'IMX_EnterTicket_log.log')
     ticket_entry_window()
 
 

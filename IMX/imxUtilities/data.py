@@ -1,9 +1,13 @@
 #!/usr/bin/env python
+import traceback
 
+import numpy as np
 import pandas as pd
 from csv import writer
 import os, sys
 import logging
+
+from IPython import embed
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT_DIR, 'Data')
@@ -13,7 +17,6 @@ JOBSITE_CSV = os.path.join(DATA_DIR, 'Raw', 'Jobsite.csv')
 HOURS_WORKED = os.path.join(DATA_DIR, 'Raw', 'Hours_Worked.csv')
 INVOICES_CSV = os.path.join(DATA_DIR, 'Raw', 'Invoices.csv')
 CONTRACTORS_CSV = os.path.join(DATA_DIR, 'Raw', 'Contractors.csv')
-
 
 def clean_contractors():
     c_data = pd.read_csv(CONTRACTORS_CSV)
@@ -44,6 +47,25 @@ def hours_worked_data():
 def jobsite_data():
     logging.debug('Jobsite.csv Loaded')
     return pd.read_csv(JOBSITE_CSV, index_col=False)
+
+
+def contractors_data():
+    data = pd.read_csv(CONTRACTORS_CSV, index_col=False)
+    return data
+
+
+def get_contractors():
+    """Returns a list of contractors found in Contractors.csv"""
+    # TODO: add logic to exclude contractors that are not active
+    logging.info('called get_countractors()')
+    cont_data = contractors_data()
+    cont_data['contractor_id'] = list(map(str, cont_data['contractor_id']))
+    cont_data = cont_data.loc[cont_data['active']==True]
+    cont_data['nickname'] = cont_data['nickname'].fillna('')
+    employee_var = cont_data[['contractor_id', 'nickname', 'first_name', 'last_name']]
+    id_employee_list = [' '.join(x) for x in employee_var.values]
+    return id_employee_list
+
 
 def get_companies():
     """ Returns a list of companies found in the Companies.csv file"""
@@ -115,6 +137,18 @@ def save_to_invoice(data):
         writer_object.writerow(data)
 
 
+def save_hours_worked(data_df):
+    logging.debug('in save_hours_worked')
+    try:
+        data_df.to_csv(HOURS_WORKED, sep=',', header=False,
+                       index=False, mode='a')
+        return True
+    except Exception:
+        print('error in save_hours_worked')
+        print(traceback.format_exc())
+        return False
+
+
 
 
 
@@ -125,7 +159,8 @@ def main():
     #print(get_paired_company_jobsite())
     #next_invoice_num()
     #get_material_rate('Cohen Recycling', 'Vine')
-    clean_contractors()
+    #clean_contractors()
+    get_contractors()
 
 
 if __name__=="__main__":
