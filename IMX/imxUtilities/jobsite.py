@@ -191,7 +191,12 @@ def generate_invoice(company, jobsite, start_date, end_date):
         jobsite_data = ticket_data.loc[
             (ticket_data['company_name'] == company) &
             (ticket_data['jobsite'] == jobsite)]
-        by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_dates)]
+        # this allows to generate an invoice for 1 specific day
+        #embed()
+        if start_date == end_date:
+            by_date = jobsite_data.loc[jobsite_data['date']==str(start_date)]
+        else:
+            by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_dates)]
         invoice_df = by_date[['ticket_number', 'jobsite', 'date', 'tare_weight', 'gross_weight',
                               'net_weight', 'material_type', 'rate']]
         invoice_df['Total'] = invoice_df['rate'] * invoice_df['net_weight']
@@ -220,6 +225,7 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     logging.debug('In invoice_to_table')
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()
+    #embed()
     job_site = invoice_data['Job Site'].unique()[0]
     sent_status = True
     sent_date = date.today()

@@ -1,12 +1,12 @@
 ticket_number,internal_id,company_name,jobsite,date,attribute_date,employees,num_of_employees,tare_weight,gross_weight,net_weight,hours_worked,material_type,rate
 1001,1001,,,,,,,,,,,,
-308464,1002,JBI Scrap Processors,JBI,2022-31-1,2022-01-31,unknown,1,0,0,25100,0,5_foot_heavy_torching,0
-308465,1003,JBI Scrap Processors,JBI,2022-31-1,2022-01-31,unknown,1,0,0,23200,0,5_foot_heavy_torching,0
-308466,1004,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,25900,0,5_foot_heavy_torching,0
-308467,1005,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,28100,0,5_foot_heavy_torching,0
-308468,1006,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,40400,0,5_foot_heavy_torching,0
-308470,1007,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,26800,0,5_foot_heavy_torching,0
-158598,1008,Cohen Recycling,Sardinia,2022-01-19,2022-01-19,unknown,1,64320,42880,21440,0,5_foot_heavy_torching,0
+308464,1002,JBI Scrap Processors,JBI,2022-31-1,2022-01-31,unknown,1,0,0,25100,0,5_foot_heavy_torching,30
+308465,1003,JBI Scrap Processors,JBI,2022-31-1,2022-01-31,unknown,1,0,0,23200,0,5_foot_heavy_torching,30
+308466,1004,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,25900,0,5_foot_heavy_torching,30
+308467,1005,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,28100,0,5_foot_heavy_torching,30
+308468,1006,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,40400,0,5_foot_heavy_torching,30
+308470,1007,JBI Scrap Processors,JBI,2022-02-02,2022-02-02,unknown,1,0,0,26800,0,5_foot_heavy_torching,30
+158598,1008,Cohen Recycling,Sardinia,2022-01-19,2022-01-19,unknown,1,64320,42880,21440,0,5_foot_heavy_torching,30
 11111,1009,Cohen Recycling,Sardinia,2022-02-01,2022-02-01,unknown,1,0,0,100,0,2 Foot: 65.0,0
 222222,1010,Cohen Recycling,Macon,2022-02-02,2022-02-02,unknown,1,0,0,200,0,3 Foot: 50.0,0
 12345,1011,"Redline Metalsl, Inc.",Redline,2022-02-03,2022-02-03,unknown,1,0,0,100,0,Heavy Metal_5,30
