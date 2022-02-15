@@ -29,6 +29,7 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     :return: pandas dataframe containing date, material type, net weight, hours worked, rate,
     man hours, per hours production
     """
+    logging.debug('in jobsite.jobsite_production')
     total_man_hours = jobsite_man_hours(jobsite, start_date, end_date, return_dates=True)
     hours = total_man_hours.values
     dates = total_man_hours.index
@@ -48,6 +49,7 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
 
 
 def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
+    logging.debug('in jobsite.jobsite_hours_worked')
     hours_data = data.hours_worked_data()
     list_of_dates = utilities.dates_list(start_date, end_date)
     site_data = hours_data[hours_data['jobsite'] == jobsite]
@@ -70,6 +72,7 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
 
 def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
     # list of contractors at site
+    logging.debug('in jobsite.jobsite_man_hours')
     contractors_ids = contractors_at_site(jobsite, start_date, end_date)
     if 'return_dates' in kwargs.keys():
         list_of_dates = utilities.dates_list(start_date, end_date)
@@ -103,6 +106,7 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
     Returns:
         contractor_ids(set): contractor ids found at the jobsite over the dates
     """
+    logging.debug('in jobsite.contractors_at_site')
     # uses Hours_Worked.csv
     site_data = data.hours_worked_data()
     # fileter for jobsite
@@ -132,6 +136,7 @@ def contractor_weekly_hours(contractor, jobsite, start_date, end_date, **kwargs)
         if no kwargs: returns int of total hours a contractor worked over the desired date range.
         else: returns dataframe
     """
+    logging.debug('in jobsite.contractor_weekly_hours')
     dates_to_sum = utilities.dates_list(start_date, end_date)
     hours_worked = []
     # Used to return dates the hours where worked
@@ -159,6 +164,7 @@ def contractor_daily_hours(contractor, a_date, jobsite):
         a_date(str): a string date in format YYYY-MM-DD
         jobsite(str): jobsite to evaluate
     """
+    logging.debug('in jobsite.contractor_daily_hours')
     hours_worked_data = data.hours_worked_data()
     contractor_data = hours_worked_data.loc[(hours_worked_data['date'] == a_date) & (hours_worked_data['contractor_id'] == contractor)]
     contractor_data = contractor_data[contractor_data['jobsite'] == jobsite]
@@ -169,6 +175,7 @@ def contractor_daily_hours(contractor, a_date, jobsite):
 def tons_cut(jobsite, start_date, end_date, **kwargs):
     """Returns pandas series that contains how many tons where cut over the dates.
     Grouped by type of material"""
+    logging.debug('in jobsite.tons_cut')
     t_data = data.tickets_data()
     list_of_dates = utilities.dates_list(start_date, end_date)
     site_data = t_data.loc[t_data['jobsite'] == jobsite]
@@ -184,6 +191,7 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
 
 
 def generate_invoice(company, jobsite, start_date, end_date):
+    logging.debug('in jobsite.generate_invoice')
     try:
         logging.debug('In generate_invoice')
         list_of_dates = utilities.dates_list(start_date, end_date)
@@ -222,6 +230,7 @@ def generate_invoice(company, jobsite, start_date, end_date):
 
 
 def invoice_to_table(invoice_data, invoice_num, company_name):
+    logging.debug('in jobsite.invoice_to_table')
     logging.debug('In invoice_to_table')
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()

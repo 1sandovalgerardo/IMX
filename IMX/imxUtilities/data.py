@@ -29,17 +29,20 @@ def clean_contractors():
     c_data.to_csv(file_name, index=False)
 
 def tickets_data():
+    logging.debug('Tickets.csv loaded')
     tickets_path = os.path.join(DATA_DIR,'Raw', 'Tickets.csv')
     data = pd.read_csv(tickets_path, index_col=False)
     return data
 
 
 def hours_worked_data():
+    logging.debug('Hours_Worked.csv loaded')
     data = pd.read_csv(HOURS_WORKED, index_col=False)
     return data
 
 
 def jobsite_data():
+    logging.debug('Jobsite.csv Loaded')
     return pd.read_csv(JOBSITE_CSV, index_col=False)
 
 def get_companies():

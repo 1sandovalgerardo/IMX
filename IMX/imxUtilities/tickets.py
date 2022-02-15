@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 
 import pandas as pd
 #import os, sys
@@ -22,6 +23,7 @@ def get_ticket_values(*ticket_data):
     Get ticket information that was passed into the gui.
     Returns a dictionary.
     """
+    logging.debug('in tickets.get_ticket_values()')
     key_order = ['ticket_number', 'selected_company', 'company_jobsite', 'date',
                  'attribute_date', 'contractors',  'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
@@ -48,6 +50,7 @@ def clean_ticket(data_dict):
     Returns:
         list: data to write to file
     """
+    logging.debug('in tickets.clean_ticket')
     key_order = ['ticket_number', 'internal_ticket', 'selected_company', 'company_jobsite', 'date',
                  'attribute_date', 'contractors',  'num_of_contractors', 'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
@@ -77,6 +80,8 @@ def clean_ticket(data_dict):
             data_to_write[-1] = material_type
             data_to_write.append(float(rate))
         '''
+    logging.info('Data that will be saved:')
+    logging.info(data_to_write)
     return data_to_write
 
 
@@ -88,6 +93,7 @@ def get_jobsite_rates(jobsite):
     Returns:
         list(tuples): a list of tuple pairs in the following form (material, rate)
     """
+    logging.debug('in tickets.get_jobsite_rates')
     site_data = data.jobsite_data()
     site_data = site_data[site_data['jobsite_name']==jobsite]
     #print(f'Site Data: {site_data}')
@@ -107,6 +113,7 @@ def get_jobsite_rates(jobsite):
 def jobsite_rate_to_list(jobsite_rates_dict):
     '''Expects to receive output from get_jobsite_rates.
     Will return a list of values to use in the combobox dropdown'''
+    logging.debug('in tickets.jobsite_rate_to_list')
     output_list = []
     for key, value in jobsite_rates_dict.items():
         output_list.append(': '.join((key, str(value))))

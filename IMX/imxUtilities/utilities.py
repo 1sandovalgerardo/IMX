@@ -7,6 +7,7 @@ import logging
 
 
 def dates_list(start_date, end_date):
+    logging.debug('in utilities.dates_list')
     if start_date == end_date:
         return start_date
     # check if its dt.date() object
