@@ -19,7 +19,7 @@ def enter_time_logic(*args):
     company = args[0].get()
     jobsite = args[1].get()
     contractor = args[2].get()
-    contractor_id, first_name, last_name = contractor.split()
+    contractor_id, nickname,  first_name, last_name = contractor.split()
     date_worked = parser.parse(args[3].get()).date()
     hours_worked = args[4].get()
     data = [[contractor_id, first_name, last_name, date_worked,
@@ -41,6 +41,7 @@ def submission_box(*args):
                         message=f'{args[1]} hours for {args[0]} entered')
 
 def run_time_entry():
+    utils.utilities.create_log(True, 'IMX_TimeSheet_log.log')
     master_window = tk.Tk()
 
     # this is for cosmetic purpose
@@ -63,7 +64,7 @@ def run_time_entry():
     selected_company.set('Selected Company')
 
     ## Jobsite Combo Box
-    company_names, jobsites = utils.get_paired_company_jobsite()
+    company_names, jobsites = utils.data.get_paired_company_jobsite()
     def callback(eventObject):
         abc = eventObject.widget.get()
         company_selected = selected_company.get()
