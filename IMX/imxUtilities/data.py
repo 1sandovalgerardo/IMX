@@ -101,6 +101,7 @@ def save_ticket_data(ticket_data):
     except Exception as e:
         print('error in save_ticket_data')
         print(e)
+        return False
     return True
 
 

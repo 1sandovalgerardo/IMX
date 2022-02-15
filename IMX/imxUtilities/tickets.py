@@ -6,8 +6,10 @@ from collections import defaultdict
 from dateutil import parser
 from tkinter import messagebox
 
+from IPython import embed
 from . import data
 
+# TODO: what to do if ticket numbers start to include letters.
 
 
 def duplicate_ticket(ticket_number):
@@ -21,10 +23,11 @@ def get_ticket_values(*ticket_data):
     Returns a dictionary.
     """
     key_order = ['ticket_number', 'selected_company', 'company_jobsite', 'date',
-                 'attribute_date', 'contractor',  'gross_weight', 'tare_weight',
+                 'attribute_date', 'contractors',  'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
     data_dict = defaultdict()
     for key, value in zip(key_order, ticket_data):
+        # Checks for entered value, if nothing is entered then its length is zero
         if len(value.get()) == 0:
             data_dict[key] = 0
         else:
@@ -32,6 +35,9 @@ def get_ticket_values(*ticket_data):
     data_dict['date'] = parser.parse(data_dict['date']).date()
     if data_dict['attribute_date']==0:
         data_dict['attribute_date'] = data_dict['date']
+    # check for unkown contractor/s
+    if data_dict['contractors'] == 0:
+        data_dict['contractors'] = 'unknown'
     return data_dict
 
 def clean_ticket(data_dict):
@@ -46,13 +52,31 @@ def clean_ticket(data_dict):
                  'attribute_date', 'contractors',  'num_of_contractors', 'gross_weight', 'tare_weight',
                  'net_weight', 'hours_worked', 'material_type', 'rate']
     data_to_write = []
+    #embed()
     for key in key_order:
         if key == 'internal_ticket':
             data_to_write.append(data.next_ticket_id())
         elif key == 'num_of_contractors':
-            data_to_write.append(len(data_dict['contractors'].split(',')))
+            # what to do if single name is entered?
+            try:
+                data_to_write.append(len(data_dict['contractors'].split(',')))
+            except Exception as e:
+                data_to_write.append(1)
         else:
             data_to_write.append(data_dict[key])
+        #embed()
+    material_type, rate = data_to_write[-2].split(':')
+    data_to_write[-2] = material_type
+    if data_to_write[-1] == 0:
+        data_to_write[-1] = rate
+        '''
+        elif key == 'rate':
+            material_type, rate = data_dict['material_type'].split(':')
+            print(f'Material Type: {material_type}')
+            print(f'Rate: {rate}')
+            data_to_write[-1] = material_type
+            data_to_write.append(float(rate))
+        '''
     return data_to_write
 
 

@@ -9,6 +9,10 @@ import imxUtilities as utils
 from imxUtilities import jobsite
 from imxUtilities import utilities
 
+
+#TODO: correct logic so that rate is being passed through to the invoice csv.
+#TODO: add logic that allows logic for a 1 day inquiry on invoice and payroll
+
 def payroll_logic(*args):
     jobsite = args[0].get()
     start_date = parser.parse(args[1].get()).date()

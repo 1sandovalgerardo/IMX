@@ -54,6 +54,7 @@ def enter_ticket(*args):
         messagebox.showerror('Ticket Not Entered',
                              message="Data Not Entered")
         return False
+    # run save_ticket_data, if it returns False, an error occurred
     if utils.data.save_ticket_data(data_to_write):
         messagebox.showinfo('Ticket Entered',
                             message='Ticket Entered Successfully')
