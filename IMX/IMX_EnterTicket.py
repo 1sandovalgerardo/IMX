@@ -178,7 +178,7 @@ def ticket_entry_window():
 
 
 def main():
-    utils.utilities.create_log(True, 'IMX_EnterTicket_log.log')
+    utils.utilities.create_log(True, 'IMX_EnterTicket')
     ticket_entry_window()
 
 

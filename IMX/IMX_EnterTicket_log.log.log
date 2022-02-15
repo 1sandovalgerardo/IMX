@@ -1,0 +1,32 @@
+DEBUG:root:logging established
+INFO:root:get_companies() called
+DEBUG:root:['JBI Scrap Processors', 'Cohen Recycling', 'BL Duke', 'Bridgeport Metals', 'Kimmel Scrap Iron & Metal', 'Redline Metalsl, Inc.']
+DEBUG:root:get_companies() ended
+DEBUG:root:get_paired_company_jobsite() called
+INFO:root:get_companies() called
+DEBUG:root:['JBI Scrap Processors', 'Cohen Recycling', 'BL Duke', 'Bridgeport Metals', 'Kimmel Scrap Iron & Metal', 'Redline Metalsl, Inc.']
+DEBUG:root:get_companies() ended
+DEBUG:root:get_paired_company_jobsite() ended
+DEBUG:root:Company Selected: Cohen Recycling
+DEBUG:root:List of jobsites: ['Vine', 'Macon', 'Sardinia', 'Middletown']
+DEBUG:root:Material Jobsite Selected: Sardinia
+DEBUG:root:in tickets.get_jobsite_rates
+DEBUG:root:Jobsite.csv Loaded
+DEBUG:root:Dictionary : defaultdict(None, {'Heavy Metal_5': 35, '3 Foot': 50.0, '2 Foot': 65.0, 'Cast': 55.0, 'Coils': 65.0})
+DEBUG:root:in tickets.jobsite_rate_to_list
+DEBUG:root:Gross: 61620.0	 Tare: 42540.0	 Net: 19050.0
+DEBUG:root:Tickets.csv loaded
+DEBUG:root:Gross: 61620.0	 Tare: 42540.0	 Net: 19080.0
+DEBUG:root:Tickets.csv loaded
+DEBUG:root:in tickets.get_ticket_values()
+DEBUG:root:in tickets.clean_ticket
+INFO:root:Data that will be saved:
+INFO:root:['19050', 1016, 'Cohen Recycling', 'Sardinia', datetime.date(2022, 1, 19), datetime.date(2022, 1, 19), 'unknown', 1, '61620', '42540', '19080', 0, 'Cast', ' 55.0']
+DEBUG:root:Gross: 61620.0	 Tare: 42540.0	 Net: 19080.0
+DEBUG:root:Tickets.csv loaded
+DEBUG:root:in tickets.get_ticket_values()
+DEBUG:root:in tickets.clean_ticket
+INFO:root:Data that will be saved:
+INFO:root:['19050', 1017, 'Cohen Recycling', 'Sardinia', datetime.date(2022, 1, 19), datetime.date(2022, 1, 19), 'unknown', 1, '61620', '42540', '19080', 0, 'Cast', ' 55.0']
+DEBUG:root:Gross: 61620.0	 Tare: 42540.0	 Net: 19080.0
+DEBUG:root:Tickets.csv loaded

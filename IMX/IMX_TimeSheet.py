@@ -41,7 +41,6 @@ def submission_box(*args):
                         message=f'{args[1]} hours for {args[0]} entered')
 
 def run_time_entry():
-    utils.utilities.create_log(True, 'IMX_TimeSheet_log.log')
     master_window = tk.Tk()
 
     # this is for cosmetic purpose
@@ -111,6 +110,7 @@ def run_time_entry():
 
 
 def main():
+    utils.utilities.create_log(True, 'IMX_TimeSheet')
     run_time_entry()
 
 

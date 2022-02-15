@@ -7,11 +7,33 @@ INFO:root:get_companies() called
 DEBUG:root:['JBI Scrap Processors', 'Cohen Recycling', 'BL Duke', 'Bridgeport Metals', 'Kimmel Scrap Iron & Metal', 'Redline Metalsl, Inc.']
 DEBUG:root:get_companies() ended
 DEBUG:root:get_paired_company_jobsite() ended
+DEBUG:root:in jobsite.generate_invoice
 DEBUG:root:In generate_invoice
+DEBUG:root:in utilities.dates_list
+DEBUG:root:Tickets.csv loaded
 DEBUG:root:In next_invoice_num()
-INFO:root:invoice file name: /home/gsandoval/Documents/IMX/IMX/IMX/Data/Reports_To_Process/Invoice_1019_Cohen Recycling_Macon_2022-02-02_2022-02-02.csv
+INFO:root:invoice file name: /home/gsandoval/Documents/IMX/IMX/IMX/Data/Reports_To_Process/Invoice_1020_JBI Scrap Processors_JBI_2022-02-01_2022-02-10.csv
 DEBUG:root:invoice data: 
-    Ticket Num Job Site        Date  Tare Weight  Gross Weight  Net Weight Material Type  Rate  Total
-9      222222    Macon  2022-02-02          0.0           0.0       200.0  3 Foot: 50.0   0.0    0.0
+    Ticket Num Job Site        Date  ...          Material Type  Rate      Total
+3      308466      JBI  2022-02-02  ...  5_foot_heavy_torching  30.0   777000.0
+4      308467      JBI  2022-02-02  ...  5_foot_heavy_torching  30.0   843000.0
+5      308468      JBI  2022-02-02  ...  5_foot_heavy_torching  30.0  1212000.0
+6      308470      JBI  2022-02-02  ...  5_foot_heavy_torching  30.0   804000.0
+
+[4 rows x 9 columns]
+DEBUG:root:in jobsite.invoice_to_table
 DEBUG:root:In invoice_to_table
-DEBUG:root:[1019, 'Cohen Recycling', 'Macon', 200.0, 0.0, True, datetime.date(2022, 2, 14), False]
+DEBUG:root:[1020, 'JBI Scrap Processors', 'JBI', 121200.0, 3636000.0, True, datetime.date(2022, 2, 15), False]
+DEBUG:root:in jobsite.jobsite_production
+DEBUG:root:in jobsite.jobsite_man_hours
+DEBUG:root:in jobsite.contractors_at_site
+DEBUG:root:Hours_Worked.csv loaded
+DEBUG:root:in utilities.dates_list
+DEBUG:root:in utilities.dates_list
+DEBUG:root:Hours_Worked.csv loaded
+DEBUG:root:in jobsite.tons_cut
+DEBUG:root:Tickets.csv loaded
+DEBUG:root:in utilities.dates_list
+DEBUG:root:in jobsite.jobsite_hours_worked
+DEBUG:root:Hours_Worked.csv loaded
+DEBUG:root:in utilities.dates_list
