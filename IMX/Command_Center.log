@@ -7,3 +7,11 @@ INFO:root:get_companies() called
 DEBUG:root:['JBI Scrap Processors', 'Cohen Recycling', 'BL Duke', 'Bridgeport Metals', 'Kimmel Scrap Iron & Metal', 'Redline Metalsl, Inc.']
 DEBUG:root:get_companies() ended
 DEBUG:root:get_paired_company_jobsite() ended
+DEBUG:root:In generate_invoice
+DEBUG:root:In next_invoice_num()
+INFO:root:invoice file name: /home/gsandoval/Documents/IMX/IMX/IMX/Data/Reports_To_Process/Invoice_1019_Cohen Recycling_Macon_2022-02-02_2022-02-02.csv
+DEBUG:root:invoice data: 
+    Ticket Num Job Site        Date  Tare Weight  Gross Weight  Net Weight Material Type  Rate  Total
+9      222222    Macon  2022-02-02          0.0           0.0       200.0  3 Foot: 50.0   0.0    0.0
+DEBUG:root:In invoice_to_table
+DEBUG:root:[1019, 'Cohen Recycling', 'Macon', 200.0, 0.0, True, datetime.date(2022, 2, 14), False]
