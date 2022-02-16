@@ -36,7 +36,6 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     total_man_hours = pd.DataFrame({'date': dates, 'man_hours': hours})
     total_tons_cut = tons_cut(jobsite, start_date, end_date, return_dates=True)
     total_tons_cut = total_tons_cut.reset_index()
-    #embed()
     final_df = total_tons_cut.merge(total_man_hours, how='outer', left_index=True, right_index=True)
     final_df['per_hour_production'] = round(final_df.net_weight / final_df.man_hours, 3)
     # saves output to directory Reports_To_Process
@@ -53,7 +52,11 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
     hours_data = data.hours_worked_data()
     list_of_dates = utilities.dates_list(start_date, end_date)
     site_data = hours_data[hours_data['jobsite'] == jobsite]
+    if list_of_dates==start_date:
+        list_of_dates = [str(list_of_dates)]
+    #if list
     by_date = site_data[site_data['date'].isin(list_of_dates)]
+    #embed()
     grouped_data = by_date.groupby(['date', 'contractor_id',
                                     'first_name', 'last_name']).sum()
     if 'to_file' in kwargs.keys():
@@ -76,10 +79,19 @@ def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
     contractors_ids = contractors_at_site(jobsite, start_date, end_date)
     if 'return_dates' in kwargs.keys():
         list_of_dates = utilities.dates_list(start_date, end_date)
+        # load csv file
         weekly_hours_data = data.hours_worked_data()
+        # Filter by jobsite
         job_site_hours = weekly_hours_data[weekly_hours_data['jobsite'] == jobsite]
+        # Filter by contractors
         daily_hours = job_site_hours[job_site_hours['contractor_id'].isin(contractors_ids)]
-        daily_hours = daily_hours[daily_hours['date'].isin(list_of_dates)]
+        # Filter by passed dates
+        # If single date entered use ==, else use .isin()
+        # TODO: fix this logic, items are not getting saved
+        if list_of_dates == start_date:
+            daily_hours = daily_hours[daily_hours['date'] == str(list_of_dates)]
+        else:
+            daily_hours = daily_hours[daily_hours['date'].isin(list_of_dates)]
         grouped_daily_hours = daily_hours.groupby('date').sum()['hours_worked']
         return grouped_daily_hours
     else:
@@ -115,9 +127,13 @@ def contractors_at_site(jobsite, start_date, end_date, **kwargs):
     list_of_dates = utilities.dates_list(start_date, end_date)
     contractor_ids = []
     # look through list of dates to filter for contractors at the jobsite on that date
-    for date in list_of_dates:
-        ids = list_of_contractors.loc[list_of_contractors['date'] == str(date)]
+    if list_of_dates == start_date:
+        ids = list_of_contractors.loc[list_of_contractors['date'] == str(start_date)]
         contractor_ids = contractor_ids + list(ids['contractor_id'])
+    else:
+        for date in list_of_dates:
+            ids = list_of_contractors.loc[list_of_contractors['date'] == str(date)]
+            contractor_ids = contractor_ids + list(ids['contractor_id'])
     # return a set of ids
     return set(contractor_ids)
 
@@ -179,10 +195,14 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
     t_data = data.tickets_data()
     list_of_dates = utilities.dates_list(start_date, end_date)
     site_data = t_data.loc[t_data['jobsite'] == jobsite]
-    date_data = site_data.loc[site_data['attribute_date'].isin(list_of_dates)]
+    if list_of_dates == start_date:
+        date_data = site_data.loc[site_data['attribute_date'] == str(list_of_dates)]
+    else:
+        date_data = site_data.loc[site_data['attribute_date'].isin(list_of_dates)]
     if 'return_dates' in kwargs.keys():
         total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()
         return_frame = total_weights[['net_weight', 'hours_worked', 'rate']]
+        embed()
         return return_frame
     else:
         total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()['net_weight']

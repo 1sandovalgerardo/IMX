@@ -15,7 +15,6 @@ def payroll_logic(*args):
     start_date = parser.parse(args[1].get()).date()
     end_date = parser.parse(args[2].get()).date()
     print(start_date, end_date)
-    print(type(start_date))
     utils.jobsite.jobsite_production(jobsite, start_date, end_date, to_file=True)
     utils.jobsite.jobsite_hours_worked(jobsite, start_date, end_date, to_file=True)
     payroll_completed()

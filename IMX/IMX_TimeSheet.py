@@ -19,7 +19,10 @@ def enter_time_logic(*args):
     company = args[0].get()
     jobsite = args[1].get()
     contractor = args[2].get()
-    contractor_id, nickname,  first_name, last_name = contractor.split()
+    try:
+        contractor_id, nickname,  first_name, last_name = contractor.split()
+    except:
+        contractor_id, first_name, last_name = contractor.split()
     date_worked = parser.parse(args[3].get()).date()
     hours_worked = args[4].get()
     data = [[contractor_id, first_name, last_name, date_worked,
