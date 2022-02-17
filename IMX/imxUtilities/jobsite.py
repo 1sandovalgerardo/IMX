@@ -36,6 +36,9 @@ def jobsite_production(jobsite, start_date, end_date, to_file=False):
     total_man_hours = pd.DataFrame({'date': dates, 'man_hours': hours})
     total_tons_cut = tons_cut(jobsite, start_date, end_date, return_dates=True)
     total_tons_cut = total_tons_cut.reset_index()
+    # We use outer join since the dates on the tickets may not be the actual date that
+    # material was cut. Outer join thus allows all hours worked from the date range to be
+    # included
     final_df = total_tons_cut.merge(total_man_hours, how='outer', left_index=True, right_index=True)
     final_df['per_hour_production'] = round(final_df.net_weight / final_df.man_hours, 3)
     # saves output to directory Reports_To_Process
@@ -87,12 +90,13 @@ def jobsite_man_hours(jobsite, start_date, end_date, **kwargs):
         daily_hours = job_site_hours[job_site_hours['contractor_id'].isin(contractors_ids)]
         # Filter by passed dates
         # If single date entered use ==, else use .isin()
-        # TODO: fix this logic, items are not getting saved
         if list_of_dates == start_date:
             daily_hours = daily_hours[daily_hours['date'] == str(list_of_dates)]
         else:
             daily_hours = daily_hours[daily_hours['date'].isin(list_of_dates)]
         grouped_daily_hours = daily_hours.groupby('date').sum()['hours_worked']
+        # returns the total hours at a jobsite worked by
+        # all contractors on a specific date
         return grouped_daily_hours
     else:
         total_hours = []
@@ -202,7 +206,6 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
     if 'return_dates' in kwargs.keys():
         total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()
         return_frame = total_weights[['net_weight', 'hours_worked', 'rate']]
-        embed()
         return return_frame
     else:
         total_weights = date_data.groupby(['attribute_date', 'material_type']).sum()['net_weight']

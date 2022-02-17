@@ -113,7 +113,7 @@ def run_time_entry():
 
 
 def main():
-    utils.utilities.create_log(True, 'IMX_TimeSheet')
+    #utils.utilities.create_log(True, 'IMX_TimeSheet')
     run_time_entry()
 
 

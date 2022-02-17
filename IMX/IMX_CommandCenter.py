@@ -105,7 +105,7 @@ def run_control_center():
 
 
 def main():
-    utilities.create_log(True, 'Command_Center')
+    #utilities.create_log(True, 'Command_Center')
     run_control_center()
     # utils.jobsite_hours_worked('Big 3', '2022-01-03', '2022-01-07', to_file=True)
 
