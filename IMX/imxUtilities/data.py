@@ -53,6 +53,10 @@ def contractors_data():
     data = pd.read_csv(CONTRACTORS_CSV, index_col=False)
     return data
 
+def invoice_data():
+    data = pd.read_csv(INVOICES_CSV, index_col=False)
+    return data
+
 
 def get_contractors():
     """Returns a list of contractors found in Contractors.csv"""

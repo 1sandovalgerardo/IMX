@@ -13,10 +13,18 @@ from . import data
 # TODO: what to do if ticket numbers start to include letters.
 
 
-def duplicate_ticket(ticket_number):
+def duplicate_ticket(ticket_number, company):
+    """Returns True if duplicate ticket. Returns False if not."""
     ticket_data = data.tickets_data()
     dup_ticket = int(ticket_number) in list(ticket_data['ticket_number'])
-    return dup_ticket
+    if not dup_ticket:
+        return False
+    else:
+        ticket_df = ticket_data[ticket_data['ticket_number'] == int(ticket_number)]
+        if company in list(ticket_df['company_name']):
+            return True
+        else:
+            return False
 
 def get_ticket_values(*ticket_data):
     """

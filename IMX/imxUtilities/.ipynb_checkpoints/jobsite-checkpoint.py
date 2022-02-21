@@ -72,7 +72,7 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
         # this is due to the group by
         grouped_data.to_csv(file_path, sep=',')
     grouped_data = grouped_data[['hours_worked']]
-    return grouped_dat
+    return grouped_data
 
 
 

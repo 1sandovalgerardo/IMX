@@ -22,10 +22,11 @@ def perform_checks(*args, **kwargs):
     gross_weight = float(args[1].get()) if len(args[1].get()) > 0 else 0
     tare_weight = float(args[2].get()) if len(args[2].get()) > 0 else 0
     net_weight = float(args[3].get()) if len(args[3].get()) > 0 else 0
+    company_name = args[4].get()
     logging.debug(f'Gross: {gross_weight}\t Tare: {tare_weight}\t Net: {net_weight}')
 
     # check for a duplicate ticket
-    if utils.tickets.duplicate_ticket(ticket_number):
+    if utils.tickets.duplicate_ticket(ticket_number, company_name):
         message = 'This is a duplicate ticket'
         messagebox.showwarning(title='DUPLICATE TICKET',
                                message=message)
@@ -153,7 +154,8 @@ def ticket_entry_window():
                                   command=lambda: perform_checks(ticket_number,
                                                                  gross_weight,
                                                                  tare_weight,
-                                                                 net_weight))
+                                                                 net_weight,
+                                                                 selected_company))
     run_logic_button = tk.Button(master_window,
                                  text='Enter Data',
                                  command=lambda: enter_ticket(ticket_number,
