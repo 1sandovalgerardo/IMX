@@ -127,6 +127,24 @@ def jobsite_rate_to_list(jobsite_rates_dict):
         output_list.append(': '.join((key, str(value))))
     return output_list
 
+def should_run_weight_calculator(gross, tare, net):
+    if len(set([gross, tare, net])) == 3 and (0 in [gross, tare, net]):
+        return True
+    return False
+
+def weight_calculator(gross, tare, net):
+    """Excpects weights to be passed in. Checks for number of missing values.
+    If 1 value missing, provides what the difference is."""
+    gross = int(gross)
+    tare = int(tare)
+    net = int(net)
+    if gross == 0:
+        return  tare + net
+    if tare == 0:
+        return gross - net
+    if net == 0:
+        return gross - tare
+
 
 
 

@@ -24,7 +24,13 @@ def perform_checks(*args, **kwargs):
     net_weight = float(args[3].get()) if len(args[3].get()) > 0 else 0
     company_name = args[4].get()
     logging.debug(f'Gross: {gross_weight}\t Tare: {tare_weight}\t Net: {net_weight}')
-
+    # Run weight calculator
+    if utils.tickets.should_run_weight_calculator(gross_weight, tare_weight, net_weight):
+        missing_value = utils.tickets.weight_calculator(gross_weight, tare_weight, net_weight)
+        message = f'The missing value is: {missing_value}'
+        messagebox.showinfo(title='Missing Value Calculator',
+                            message = message)
+        return False
     # check for a duplicate ticket
     if utils.tickets.duplicate_ticket(ticket_number, company_name):
         message = 'This is a duplicate ticket'
@@ -51,7 +57,7 @@ def enter_ticket(*args):
     """Primary gui logic"""
     ticket_data = utils.tickets.get_ticket_values(*args)
     data_to_write = utils.tickets.clean_ticket(ticket_data)
-    if not perform_checks(args[0], args[6], args[7], args[8]):
+    if not perform_checks(args[0], args[6], args[7], args[8], args[1]):
         messagebox.showerror('Ticket Not Entered',
                              message="Data Not Entered")
         return False
