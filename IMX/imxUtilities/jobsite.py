@@ -263,6 +263,7 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()
     embed()
+    # if no data return false
     if invoice_data['Job Site'].unique().shape[0] == 0:
         return False
     job_site = invoice_data['Job Site'].unique()[0]
