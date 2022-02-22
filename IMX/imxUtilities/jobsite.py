@@ -72,7 +72,7 @@ def jobsite_hours_worked(jobsite, start_date, end_date, **kwargs):
         # this is due to the group by
         grouped_data.to_csv(file_path, sep=',')
     grouped_data = grouped_data[['hours_worked']]
-    return grouped_dat
+    return grouped_data
 
 
 
@@ -244,7 +244,12 @@ def generate_invoice(company, jobsite, start_date, end_date):
         invoice_df.to_csv(file_path, index=False, mode='w')
         # Save invoice data to invoice table
         logging.debug(f'invoice data: \n {invoice_df}')
-        invoice_to_table(invoice_df, new_invoice_num, company)
+        if not invoice_to_table(invoice_df, new_invoice_num, company):
+            print('####')
+            print('No data exists for selected jobsite.')
+            print('Therefore no tickets entered for jobiste and selected dates.')
+            print('####')
+            return False
         return True
     except Exception as error:
         print(error)
@@ -258,6 +263,8 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()
     #embed()
+    if invoice_data['Job Site'].unique().shape[0] == 0:
+        return False
     job_site = invoice_data['Job Site'].unique()[0]
     sent_status = True
     sent_date = date.today()

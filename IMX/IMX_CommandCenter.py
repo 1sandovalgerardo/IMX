@@ -34,8 +34,11 @@ def invoice_logic(*args):
     invoice_result = jobsite.generate_invoice(company, jobsite_name, start_date, end_date)
     if not invoice_result:
         print('there was an error')
+        message = """Invoice NOT created. 
+Possible that no work done on dates at that jobsite.
+Check Tickets.csv in Raw """
         messagebox.showerror(title='Invoice Status',
-                             message='Invoice Not Created')
+                             message=message)
     if invoice_result:
         messagebox.showinfo(title='Invoice Status',
                             message='Invoice Created')
