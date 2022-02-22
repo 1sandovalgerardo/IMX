@@ -264,12 +264,16 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     total_revenue = invoice_data['Total'].sum()
     #embed()
     # if no data return false
+    print('#####')
+    print(invoice_data)
     if invoice_data['Job Site'].unique().shape[0] == 0:
         return False
     job_site = invoice_data['Job Site'].unique()[0]
+    print(job_site)
     sent_status = True
     sent_date = date.today()
     paid_status = False
+    print('#####')
     data_to_save = [invoice_num, company_name, job_site,
                     total_weight, total_revenue, sent_status, sent_date, paid_status]
     data.save_to_invoice(data_to_save)
