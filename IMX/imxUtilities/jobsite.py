@@ -262,7 +262,7 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     logging.debug('In invoice_to_table')
     total_weight = invoice_data['Net Weight'].sum()
     total_revenue = invoice_data['Total'].sum()
-    #embed()
+    embed()
     if invoice_data['Job Site'].unique().shape[0] == 0:
         return False
     job_site = invoice_data['Job Site'].unique()[0]
@@ -272,4 +272,5 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     data_to_save = [invoice_num, company_name, job_site,
                     total_weight, total_revenue, sent_status, sent_date, paid_status]
     data.save_to_invoice(data_to_save)
+    return True
 
