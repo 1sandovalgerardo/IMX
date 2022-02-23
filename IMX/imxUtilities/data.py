@@ -128,7 +128,7 @@ def next_invoice_num():
 def save_ticket_data(ticket_data):
     '''Write row of data to Tickets.csv'''
     try:
-        with open(TICKETS_CSV, 'a') as ticket_file:
+        with open(TICKETS_CSV, 'a', newline='') as ticket_file:
             writer_object = writer(ticket_file)
             writer_object.writerow(ticket_data)
     except Exception as e:
@@ -140,7 +140,8 @@ def save_ticket_data(ticket_data):
 
 def save_to_invoice(data):
     logging.debug(data)
-    with open(INVOICES_CSV, 'ab') as invoice_file:
+    # If this doesn't work, use 'ab' instead of 'a'
+    with open(INVOICES_CSV, 'a', newline='') as invoice_file:
         writer_object = writer(invoice_file)
         writer_object.writerow(data)
 
@@ -149,7 +150,7 @@ def save_hours_worked(data_df):
     logging.debug('in save_hours_worked')
     try:
         data_df.to_csv(HOURS_WORKED, sep=',', header=False,
-                       index=False, mode='ab')
+                       index=False, mode='a')
         return True
     except Exception:
         print('error in save_hours_worked')
