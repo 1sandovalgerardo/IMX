@@ -35,7 +35,6 @@ def tickets_data():
     logging.debug('Tickets.csv loaded')
     tickets_path = os.path.join(DATA_DIR,'Raw', 'Tickets.csv')
     data = pd.read_csv(tickets_path, index_col=False)
-    embed()
     data['date'] = pd.to_datetime(data['date'])
     data['date'] = data.date.dt.strftime('%Y-%m-%d')
     return data

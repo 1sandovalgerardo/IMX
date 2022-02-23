@@ -18,7 +18,7 @@ import sys
 def perform_checks(*args, **kwargs):
     # Eventually this logic can be replaced with
     # utils.tickets.get_ticket_values()
-    ticket_number = args[0].get()
+    ticket_number = int(args[0].get()) if len(args[0].get()) > 0 else 0
     gross_weight = float(args[1].get()) if len(args[1].get()) > 0 else 0
     tare_weight = float(args[2].get()) if len(args[2].get()) > 0 else 0
     net_weight = float(args[3].get()) if len(args[3].get()) > 0 else 0
@@ -32,7 +32,7 @@ def perform_checks(*args, **kwargs):
                             message = message)
         return False
     # check for a duplicate ticket
-    if utils.tickets.duplicate_ticket(ticket_number, company_name):
+    if utils.tickets.duplicate_ticket(ticket_number, company_name) and (ticket_number != 0):
         message = 'This is a duplicate ticket'
         messagebox.showwarning(title='DUPLICATE TICKET',
                                message=message)

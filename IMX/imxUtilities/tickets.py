@@ -80,14 +80,8 @@ def clean_ticket(data_dict):
     data_to_write[-2] = material_type
     if data_to_write[-1] == 0:
         data_to_write[-1] = rate
-        '''
-        elif key == 'rate':
-            material_type, rate = data_dict['material_type'].split(':')
-            print(f'Material Type: {material_type}')
-            print(f'Rate: {rate}')
-            data_to_write[-1] = material_type
-            data_to_write.append(float(rate))
-        '''
+    if data_to_write[0] == 0:
+        data_to_write[0] = data_to_write[1]
     logging.info('Data that will be saved:')
     logging.info(data_to_write)
     return data_to_write
