@@ -213,7 +213,7 @@ def tons_cut(jobsite, start_date, end_date, **kwargs):
 
 
 
-def generate_invoice(company, jobsite, start_date, end_date):
+def generate_invoice(company, jobsite, start_date, end_date, invoice_number):
     logging.debug('in jobsite.generate_invoice')
     try:
         logging.debug('In generate_invoice')
@@ -225,30 +225,24 @@ def generate_invoice(company, jobsite, start_date, end_date):
         # this allows to generate an invoice for 1 specific day
         #embed()
         if start_date == end_date:
-            by_date = jobsite_data.loc[jobsite_data['date']==str(start_date)]
+            by_date = jobsite_data.loc[jobsite_data['attribute_date']==str(start_date)]
         else:
-            by_date = jobsite_data.loc[jobsite_data['date'].isin(list_of_dates)]
-        invoice_df = by_date[['ticket_number', 'jobsite', 'date', 'tare_weight', 'gross_weight',
+            by_date = jobsite_data.loc[jobsite_data['attribute_date'].isin(list_of_dates)]
+        invoice_df = by_date[['ticket_number', 'jobsite', 'attribute_date', 'tare_weight', 'gross_weight',
                               'net_weight', 'material_type', 'rate']]
-        invoice_df['Total'] = invoice_df['rate'] * invoice_df['net_weight']
-        new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
-                         'Net Weight', 'Material Type', 'Rate', 'Total']
+        invoice_csv = format_invoice(invoice_df)
         # new invoice is here as the invoice is not yet added to the table.
         # Hence, the table entry will generate the same invoice number
-        new_invoice_num = data.next_invoice_num()
-        file_name = f'Invoice_{new_invoice_num}_{company}_{jobsite}_{start_date}_{end_date}.csv'
+        #new_invoice_num = data.next_invoice_num()
+        file_name = f'IMX_Invoice_{invoice_number}_{company}_{jobsite}_{start_date}_{end_date}.csv'
         file_path = os.path.join(REPORT_TO_PROCESS, file_name)
         logging.info(f'invoice file name: {file_path}')
-        invoice_df.columns = new_col_names
         # Save invoice data for IMX formatting
-        invoice_df.to_csv(file_path, index=False, mode='w')
+        invoice_csv.to_csv(file_path, index=False, mode='w')
         # Save invoice data to invoice table
-        logging.debug(f'invoice data: \n {invoice_df}')
-        if not invoice_to_table(invoice_df, new_invoice_num, company):
-            print('####')
-            print('No data exists for selected jobsite.')
-            print('Therefore no tickets entered for jobiste and selected dates.')
-            print('####')
+        logging.debug(f'invoice data: \n {invoice_csv}')
+        # inputs invoice int Invoice.csv for tracking
+        if not invoice_to_table(invoice_df, invoice_number, company):
             return False
         return True
     except Exception as error:
@@ -257,11 +251,31 @@ def generate_invoice(company, jobsite, start_date, end_date):
         return False
 
 
+def format_invoice(invoice_df):
+    invoice_df['total'] = invoice_df['net_weight'] / 2240 * invoice_df['rate']
+    invoice_df['net_weight_tons'] = invoice_df['net_weight'] / 2240
+    new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+                     'Net Weight', 'Material Type', 'Rate', 'Total $', 'Net Weight (Tons)']
+    invoice_df.columns = new_col_names
+    invoice_df = invoice_df[['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+                             'Net Weight', 'Net Weight (Tons)', 'Material Type', 'Rate',
+                             'Total $']]
+    invoice_df = invoice_df.round(3)
+    cols_to_format = ['Tare Weight', 'Gross Weight', 'Net Weight', 'Net Weight (Tons)', 'Total $']
+    # Note this formats the value but also makes this a string
+    for col in cols_to_format:
+        invoice_df[col] = invoice_df[col].apply('{:,}'.format)
+    return invoice_df
+
+
+
+
 def invoice_to_table(invoice_data, invoice_num, company_name):
+    '''Inserts new invoice to Invoice.csv'''
     logging.debug('in jobsite.invoice_to_table')
     logging.debug('In invoice_to_table')
     total_weight = invoice_data['Net Weight'].sum()
-    total_revenue = invoice_data['Total'].sum()
+    total_revenue = invoice_data['Total $'].sum()
     #embed()
     # if no data return false
     print('#####')
@@ -270,12 +284,14 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
         return False
     job_site = invoice_data['Job Site'].unique()[0]
     print(job_site)
-    sent_status = True
-    sent_date = date.today()
+    date_generated = date.today()
+    sent_status = False
+    sent_date = False
     paid_status = False
     print('#####')
     data_to_save = [invoice_num, company_name, job_site,
-                    total_weight, total_revenue, sent_status, sent_date, paid_status]
+                    total_weight, total_revenue, date_generated,
+                    sent_status, sent_date, paid_status]
     data.save_to_invoice(data_to_save)
     return True
 
