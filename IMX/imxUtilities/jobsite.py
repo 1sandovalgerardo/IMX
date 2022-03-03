@@ -242,7 +242,7 @@ def generate_invoice(company, jobsite, start_date, end_date, invoice_number):
         # Save invoice data to invoice table
         logging.debug(f'invoice data: \n {invoice_csv}')
         # inputs invoice int Invoice.csv for tracking
-        embed()
+        #embed()
         if not invoice_to_table(invoice_df, invoice_number, company):
             return False
         return True

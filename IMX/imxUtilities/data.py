@@ -37,7 +37,7 @@ def tickets_data():
     data = pd.read_csv(tickets_path, index_col=False)
     data['date'] = pd.to_datetime(data['date'])
     data['date'] = data.date.dt.strftime('%Y-%m-%d')
-    embed()
+    #embed()
     data['attribute_date'] = pd.to_datetime(data['attribute_date'])
     data['attribute_date'] = data.attribute_date.dt.strftime('%Y-%m-%d')
     return data
