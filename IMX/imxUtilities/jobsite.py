@@ -255,10 +255,10 @@ def generate_invoice(company, jobsite, start_date, end_date, invoice_number):
 def format_invoice(invoice_df):
     invoice_df['total'] = invoice_df['net_weight'] / 2240 * invoice_df['rate']
     invoice_df['net_weight_tons'] = invoice_df['net_weight'] / 2240
-    new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+    new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Gross Weight', 'Tare Weight',
                      'Net Weight', 'Material Type', 'Rate', 'Total $', 'Net Weight (Tons)']
     invoice_df.columns = new_col_names
-    invoice_df = invoice_df[['Ticket Num', 'Job Site', 'Date', 'Tare Weight', 'Gross Weight',
+    invoice_df = invoice_df[['Ticket Num', 'Job Site', 'Date', 'Gross Weight', 'Tare Weight',
                              'Net Weight', 'Net Weight (Tons)', 'Material Type', 'Rate',
                              'Total $']]
     invoice_df = invoice_df.round(3)
