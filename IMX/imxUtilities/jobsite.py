@@ -228,7 +228,7 @@ def generate_invoice(company, jobsite, start_date, end_date, invoice_number):
             by_date = jobsite_data.loc[jobsite_data['attribute_date']==str(start_date)]
         else:
             by_date = jobsite_data.loc[jobsite_data['attribute_date'].isin(list_of_dates)]
-        invoice_df = by_date[['ticket_number', 'jobsite', 'attribute_date', 'tare_weight', 'gross_weight',
+        invoice_df = by_date[['ticket_number', 'jobsite', 'attribute_date', 'gross_weight', 'tare_weight',
                               'net_weight', 'material_type', 'rate']]
         invoice_csv = format_invoice(invoice_df)
         # new invoice is here as the invoice is not yet added to the table.
@@ -253,16 +253,16 @@ def generate_invoice(company, jobsite, start_date, end_date, invoice_number):
 
 
 def format_invoice(invoice_df):
-    invoice_df['total'] = invoice_df['net_weight'] / 2240 * invoice_df['rate']
-    invoice_df['net_weight_tons'] = invoice_df['net_weight'] / 2240
-    new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Gross Weight', 'Tare Weight',
-                     'Net Weight', 'Material Type', 'Rate', 'Total $', 'Net Weight (Tons)']
+    invoice_df['total'] = (invoice_df['net_weight'] / 2240 * invoice_df['rate']).round(2)
+    invoice_df['net_weight_tons'] = (invoice_df['net_weight'] / 2240).round(4)
+    new_col_names = ['Ticket Num', 'Job Site', 'Date', 'Gross Weight(lbs)', 'Tare Weight(lbs)',
+                     'Net Weight(lbs)', 'Material Type', 'Rate', 'Total', 'Net Weight (Tons)']
     invoice_df.columns = new_col_names
-    invoice_df = invoice_df[['Ticket Num', 'Job Site', 'Date', 'Gross Weight', 'Tare Weight',
-                             'Net Weight', 'Net Weight (Tons)', 'Material Type', 'Rate',
-                             'Total $']]
-    invoice_df = invoice_df.round(3)
-    cols_to_format = ['Tare Weight', 'Gross Weight', 'Net Weight', 'Net Weight (Tons)', 'Total $']
+    invoice_df = invoice_df[['Ticket Num', 'Job Site', 'Date', 'Gross Weight(lbs)', 'Tare Weight(lbs)',
+                             'Net Weight(lbs)', 'Net Weight (Tons)', 'Material Type', 'Rate',
+                             'Total']]
+    #invoice_df = invoice_df.round(4)
+    cols_to_format = ['Tare Weight(lbs)', 'Gross Weight(lbs)', 'Net Weight(lbs)', 'Net Weight (Tons)', 'Total']
     # Note this formats the value but also makes this a string
     for col in cols_to_format:
         invoice_df[col] = invoice_df[col].apply('{:,}'.format)
@@ -275,8 +275,8 @@ def invoice_to_table(invoice_data, invoice_num, company_name):
     '''Inserts new invoice to Invoice.csv'''
     logging.debug('in jobsite.invoice_to_table')
     logging.debug('In invoice_to_table')
-    total_weight = invoice_data['Net Weight'].sum()
-    total_revenue = invoice_data['Total $'].sum()
+    total_weight = invoice_data['Net Weight(lbs)'].sum()
+    total_revenue = invoice_data['Total'].sum()
     #embed()
     # if no data return false
     print('#####')
