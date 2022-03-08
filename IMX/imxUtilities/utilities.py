@@ -47,7 +47,7 @@ def print_to_screen(data):
     columns = ['ticket_number', 'internal_id', 'company_name', 'job_site', 'date',
                'attribute_date', 'employees', 'num_of_employees', 'gross_weight',
                'tare_weight', 'net_weight', 'hours_worked', 'material_type', 'rate']
-    embed()
+    #embed()
     data = pd.DataFrame(data=[data], columns=columns)
     print('##########')
     print(data)
