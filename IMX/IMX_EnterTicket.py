@@ -8,8 +8,6 @@ import imxUtilities as utils
 import sys
 
 
-# TODO: if duplicate ticket, notify where the dup ticket is
-
 #for item in sys.path:
 #    print(item)
 
@@ -63,11 +61,14 @@ def enter_ticket(*args):
         return False
     # run save_ticket_data, if it returns False, an error occurred
     if utils.data.save_ticket_data(data_to_write):
+        utils.utilities.print_to_screen(data_to_write)
         messagebox.showinfo('Ticket Entered',
                             message='Ticket Entered Successfully')
     else:
         messagebox.showerror('Ticket Not Entered',
                              message='Data Not Entered')
+
+
 def ticket_entry_window():
     master_window = tk.Tk()
     master_window.title('IMX Ticket Entry')

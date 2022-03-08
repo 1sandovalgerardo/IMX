@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 import datetime as dt
+
+import pandas as pd
 from dateutil import parser
 from datetime import timedelta
 import logging
+from IPython import embed
 
 
 def dates_list(start_date, end_date):
@@ -40,6 +43,15 @@ def create_log(debug, gui):
         logger.addHandler(shellHandler)
         logging.debug('logging established')
 
+def print_to_screen(data):
+    columns = ['ticket_number', 'internal_id', 'company_name', 'job_site', 'date',
+               'attribute_date', 'employees', 'num_of_employees', 'gross_weight',
+               'tare_weight', 'net_weight', 'hours_worked', 'material_type', 'rate']
+    embed()
+    data = pd.DataFrame(data=[data], columns=columns)
+    print('##########')
+    print(data)
+    print('##########')
 
 
 
