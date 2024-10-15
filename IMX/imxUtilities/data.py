@@ -35,7 +35,7 @@ def tickets_data():
     logging.debug('Tickets.csv loaded')
     tickets_path = os.path.join(DATA_DIR,'Raw', 'Tickets.csv')
     data = pd.read_csv(tickets_path, index_col=False)
-    data['date'] = pd.to_datetime(data['date'])
+    data['date'] = pd.to_datetime(data['date'], format='mixed')
     data['date'] = data.date.dt.strftime('%Y-%m-%d')
     #embed()
     data['attribute_date'] = pd.to_datetime(data['attribute_date'])
@@ -46,7 +46,7 @@ def tickets_data():
 def hours_worked_data():
     logging.debug('Hours_Worked.csv loaded')
     data = pd.read_csv(HOURS_WORKED, index_col=False)
-    data['date'] = pd.to_datetime(data['date'])
+    data['date'] = pd.to_datetime(data['date'], format='mixed')
     data['date'] = data.date.dt.strftime('%Y-%m-%d')
     data['attribute_date'] = pd.to_datetime(data['attribute_date'])
     data['attribute_date'] = data.attribute_date.dt.strftime('%Y-%m-%d')
